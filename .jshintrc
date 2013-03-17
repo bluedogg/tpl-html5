@@ -1,0 +1,14 @@
+{
+    "globals": {
+        "jQuery": true,
+        "node": true
+    },
+
+    "asi": true,
+    "laxcomma": true,
+    "expr": true,
+    "boss": true,
+
+    "proto": true
+
+}

@@ -1,4 +1,8 @@
-tpl-html5
-=========
+# html5 template
 
-HTML5 project template for grunt-init
+> Create a avanced html5-template.
+
+
+
+
+- After init template, type: ```bower install```

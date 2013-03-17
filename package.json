@@ -1,0 +1,31 @@
+{
+  "name": "Name",
+  "version": "0.0.1",
+  "description": "Static templates of site",
+  "homepage": "http://example.com/",
+  "author": {
+    "name": "Name <info@example.com>",
+    "url": "http://example.com"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib": "~0.4.0",
+    "matchdep": "~0.1.1",
+    "grunt-remove-logging": "~0.1.0",
+    "grunt-targethtml": "~0.2.2",
+    "grunt-contrib-copy": "~0.4.0",
+    "grunt-ssh": "~0.3.0",
+    "grunt-contrib-livereload": "~0.1.2",
+    "grunt-open": "~0.2.0",
+    "grunt-regarde": "~0.1.1"
+  },
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt": "~0.4.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "license": "BSD"
+}
