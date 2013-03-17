@@ -5,4 +5,4 @@
 
 
 
-- After init template, type: ```bower install```
+- After clone template, type: ```bower install```
