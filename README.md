@@ -6,3 +6,4 @@
 
 - ```git clone git://github.com/tttptd/tpl-html5.git .```
 - ```bower install```
+- ```npm install```
