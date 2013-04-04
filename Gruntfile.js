@@ -1,13 +1,12 @@
-'use strict';
-
-var lrSnippet = require('grunt-contrib/node_modules/grunt-contrib-livereload/lib/utils').livereloadSnippet;
-
-var mountFolder = function(connect, dir) {
-    return connect.static(require('path').resolve(dir));
-};
 
 
 module.exports = function(grunt) {
+
+    var lrSnippet = require('grunt-contrib/node_modules/grunt-contrib-livereload/lib/utils').livereloadSnippet;
+    
+    var mountFolder = function(connect, dir) {
+        return connect.static(require('path').resolve(dir));
+    };
 
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
@@ -41,7 +40,7 @@ module.exports = function(grunt) {
             '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
             '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
             '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-            ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+            ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n'
         },
 
         dir: dir,
@@ -128,7 +127,7 @@ module.exports = function(grunt) {
                 // beautify: true,
                 banner: '<%= meta.banner %>'
             },
-            my_target: {
+            main: {
                 files: {
                     '<%= min_file.js %>': src.js
                 }
@@ -224,18 +223,19 @@ module.exports = function(grunt) {
         ]);
     });
 
+    grunt.registerTask('js', [
+        'jshint:grunt',
+        'jshint:src',
+        'uglify:main'
+    ]);
+
+    grunt.registerTask('css', [
+        'cssmin:main'
+    ]);
+
     grunt.registerTask('build', [
-        'clean:dist',
-        // 'coffee',
-        // 'compass:dist',
-        // 'useminPrepare',
-        // 'imagemin',
-        // 'htmlmin',
-        // 'concat',
-        // 'cssmin',
-        // 'uglify',
-        // 'copy',
-        // 'usemin'
+        'js',
+        'css'
     ]);
 
 };
