@@ -39,9 +39,9 @@ a:focus,
 .b-link:focus,
 .b-link:active
 {
-    outline: none;
-    -moz-outline-style: none;
+       -moz-outline-style: none;
     -webkit-outline-style: none;
+                  outline: none;
 }
 .b-local,
 .b-local:visited
@@ -83,9 +83,9 @@ a:focus,
 .b-noselect
 {
     -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 
 /**************************************/
