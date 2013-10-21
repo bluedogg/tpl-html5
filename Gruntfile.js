@@ -238,7 +238,10 @@ module.exports = function(grunt) {
             }
         },
         clean: {
-            dist: ['.tmp', '<%= dir.dist %>/*'],
+            dist: [
+                '.tmp',
+                '<%= dir.dist %>/*',
+            ],
             server: '.tmp'
         },
 
@@ -355,6 +358,19 @@ module.exports = function(grunt) {
         },
 
 
+        compress: {
+            main: {
+                options: {
+                    mode: 'gzip',
+                    pretty: true,
+                },
+                expand: true,
+                cwd: '<%= dir.dist %>/',
+                src: ['**/*'],
+                dest: '<%= dir.dist %>/'
+            }
+        },
+
         autoshot: {
             /*default_options: {
                 options: {
@@ -409,15 +425,12 @@ module.exports = function(grunt) {
     /****************************************************/
 
     grunt.registerTask('js', [
-        'jshint:grunt',
-        'jshint:src',
-        'uglify:early',
-        'uglify:common',
-        'uglify:vendor',
+        'jshint',
+        'uglify',
     ]);
 
     grunt.registerTask('css', [
-        'cssmin:common',
+        'cssmin',
     ]);
 
     grunt.registerTask('html', [
@@ -428,6 +441,7 @@ module.exports = function(grunt) {
         'js',
         'css',
         'html',
+        // 'compress',
     ]);
 
 };
