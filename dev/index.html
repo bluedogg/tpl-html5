@@ -6,27 +6,22 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+    <title>Title</title>
     <meta name="description" content="" />
-    <title></title>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /> -->
 
     <!--(if target dev)><!-->
         <link href="vendor/bootstrap.css/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
         <!-- <link href="vendor/bootstrap.css/css/bootstrap.css" rel="stylesheet" type="text/css" /> -->
-        <link href="../css/basic.css" rel="stylesheet" type="text/css" />
-        <link href="../css/layout.css" rel="stylesheet" type="text/css" />
+        <link href="css/basic.css" rel="stylesheet" type="text/css" />
+        <link href="css/layout.css" rel="stylesheet" type="text/css" />
     <!--<!(endif)-->
 
     <!--(if target dist)>
-        <link href="vendor/bootstrap.css/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="css/all.min.css">
+    <link href="vendor/bootstrap.css/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="css/common.min.css">
     <!(endif)-->
 
-
-    <!--[if lt IE 9]>
-        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/selectivizr/1.0.2/selectivizr-min.js"></script>
-    <![endif]-->
 
 </head>
 
@@ -35,31 +30,57 @@
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
     <![endif]-->
 
+    <!--[if lt IE 9]>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/selectivizr/1.0.2/selectivizr-min.js"></script>
+        <script src="vendor/es5-shim/es5-shim.min.js"></script>
+        <script src="vendor/json3/lib/json3.min.js"></script>
+    <![endif]-->
+
     <p>Hello, developer!</p>
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
     <footer class="b-footer">
-        <div>Copyrights &#0169; <script type="text/javascript">(function() { var beginY = 2000, dt = new Date(); document.write(( beginY == dt.getFullYear() ? '' : '' + beginY + '—' ) + dt.getFullYear()); })();</script>&#160;<span class="fn org">«company»</span></div>
+        <div>&#0169;&#160;<span class="fn org">ООО «Компания»</span>, <script type="text/javascript">(function() { var beginY = 2000, dt = new Date(); document.write((beginY == dt.getFullYear() ? '' : '' + beginY + '&#2014;') + dt.getFullYear()); })();</script></div>
     </footer>
 
-
     <!--(if target dev)><!-->
-        <script src="vendor/modernizr/modernizr.min.js"></script>
+        <script src="vendor/modernizr/modernizr.js"></script>
         <script src="vendor/jquery/jquery.min.js"></script>
+
+        <script src="js/Tm/util.js"></script>
+        <script src="js/app.js"></script>
     <!--<!(endif)-->
 
     <!--(if target dist)>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-        <script>window.modernizr || document.write('<script src="/vendor/modernizr/modernizr.min.js"><\/script>')</script>
-        <script src="//code.jquery.com/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="/vendor/jquery/jquery.min.js"><\/script>')</script>
+    <script src="js/early.min.v{{version}}.js"></script>
+    <script src="vendor/vendor.min.v{{version}}.js"></script>
+    <script src="js/common.min.v{{version}}.js"></script>
     <!(endif)-->
 
 
-
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <!--(if target dist)>
+    <script>
+        var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src='//www.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+    </script>
+    <!(endif)-->
 
 </body>
 </html>
