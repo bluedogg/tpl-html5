@@ -2,7 +2,6 @@ body
 {
     margin: 0;
     padding: 0;
-    font-size: 16px;
 }
 
 /**************************************/
@@ -61,8 +60,29 @@ a:focus,
 }
 .b-link_clr_black
 {
+    /*color: #000 !important;
+    border-color: rgba(0, 0, 0, .4) !important;*/
     color: #000 !important;
-    border-color: rgba(0, 0, 0, .4) !important;
+    border-color: #e0e0e0 !important;
+}
+
+/**************************************/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+{
+    font-size: 1em;
+    line-height: 1em;
+    margin: 0;
+}
+
+p
+{
+    margin: 0 0 14px;
 }
 
 /**************************************/
@@ -131,44 +151,44 @@ img
 {
     height: 1px;
 }
-.b-divider_height_2
+.b-divider_h_2
 {
     height: 2px;
 }
-.b-divider_color_e5e5e5
+.b-divider_c_e5e5e5
 {
     background: #e5e5e5;
 }
 
-.b-spacer_height_30
+.b-spacer_h_30
 {
     height: 30px;
 }
-.b-spacer_height_40
+.b-spacer_h_40
 {
     height: 40px;
 }
-.b-spacer_height_55
+.b-spacer_h_55
 {
     height: 55px;
 }
-.b-spacer_height_70
+.b-spacer_h_70
 {
     height: 70px;
 }
-.b-spacer_height_60
+.b-spacer_h_60
 {
     height: 60px;
 }
-.b-spacer_height_80
+.b-spacer_h_80
 {
     height: 80px;
 }
-.b-spacer_height_100
+.b-spacer_h_100
 {
     height: 100px;
 }
-.b-spacer_height_200
+.b-spacer_h_200
 {
     height: 200px;
 }

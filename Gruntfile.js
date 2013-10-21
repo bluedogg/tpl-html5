@@ -5,6 +5,7 @@ var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
 
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -14,6 +15,13 @@ var mountFolder = function (connect, dir) {
 module.exports = function(grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
+
+    /*var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
+
+    var mountFolder = function(connect, dir) {
+        return connect.static(require('path').resolve(dir));
+    };*/
+
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
@@ -371,7 +379,21 @@ module.exports = function(grunt) {
     grunt.registerTask('default', [
     ]);
 
-    grunt.renameTask('regarde', 'watch');
+    grunt.registerTask('server', function (target) {
+        if (target === 'dist') {
+            return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+        }
+
+        grunt.task.run([
+            'clean:server',
+            // 'livereload-start',
+            'connect:livereload',
+            'open:server',
+            'watch'
+        ]);
+    });
+
+    /*grunt.renameTask('regarde', 'watch');
 
     grunt.registerTask('server', function (target) {
         if(target === 'dist') {
@@ -387,7 +409,7 @@ module.exports = function(grunt) {
             'open',
             'watch'
         ]);
-    });
+    });*/
 
     /****************************************************/
 
