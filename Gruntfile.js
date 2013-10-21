@@ -79,6 +79,8 @@ module.exports = function(grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
 
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
+
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
@@ -191,7 +193,6 @@ module.exports = function(grunt) {
                     '{.tmp,<%= dir.src %>}/js/{,*/}*.js',
                     '<%= dir.src %>/i/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
                 ]
-                // tasks: [ 'livereload' ]
             }
         },
         connect: {
@@ -358,6 +359,25 @@ module.exports = function(grunt) {
         },
 
 
+        htmlmin: {
+            dist: {
+                options: {
+                    // removeComments: true,
+                    // collapseWhitespace: true,
+                    // collapseBooleanAttributes: true,
+                    removeRedundantAttributes: true,
+                    removeEmptyAttributes: true,
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= dir.dist %>',
+                    src: '**/*.html',
+                    dest: '<%= dir.dist %>'
+                }]
+            }
+        },
+
+
         compress: {
             main: {
                 options: {
@@ -408,7 +428,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', [
     ]);
 
-    grunt.registerTask('server', function (target) {
+    grunt.registerTask('server', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
         }
@@ -426,7 +446,12 @@ module.exports = function(grunt) {
 
     grunt.registerTask('js', [
         'jshint',
-        'uglify',
+        'uglify:early',
+        'uglify:common',
+    ]);
+
+    grunt.registerTask('vendor', [
+        'uglify:vendor',
     ]);
 
     grunt.registerTask('css', [
@@ -435,10 +460,12 @@ module.exports = function(grunt) {
 
     grunt.registerTask('html', [
         'targethtml',
+        'htmlmin',
     ]);
 
     grunt.registerTask('build', [
         'js',
+        'vendor',
         'css',
         'html',
         // 'compress',

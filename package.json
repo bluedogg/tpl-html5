@@ -31,5 +31,8 @@
     "grunt-html-validation": "~0.1.5",
     "grunt-contrib-compress": "~0.5.2"
   },
-  "main": "Gruntfile.js"
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt-contrib-htmlmin": "~0.1.3"
+  }
 }
