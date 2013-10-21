@@ -17,13 +17,14 @@ var mountFolder = function(connect, dir) {
  * Пробежим по src и добавим в путь префикс dir.src/
  * и создадим список минифицированных результирующих файлов
  *
+ * @param {[type]} dir [description]
  * @param {[type]} src [description]
  * @param {[type]} pkg Если не указан, возвращает только src
  *
  * @return Возвращает { src: src, min: min }
  */
-function addPrefix(src, pkg) {
-    var i, k, min;
+function addPrefix(dir, src, pkg) {
+    var i, k, j, min;
 
     min = {};
 
@@ -36,9 +37,12 @@ function addPrefix(src, pkg) {
         for(i in src) {
             if(src.hasOwnProperty(i)) {
                 if(src[i].length) { // Array
-                    src[i] = src[i].map(function(item) {
+                    for(j = 0; j < src[i].length; j++) {
+                        src[i][j] = dir.src + '/' + src[i][j];
+                    }
+                    /*src[i] = src[i].map(function(item) {
                         return dir.src + '/' + item;
-                    })
+                    })*/
                     if(pkg) {
                         min[i] = dir.dist + '/' + i + '/' + pkg.name.toLowerCase() + '.min.v' + pkg.version + '.' + i; // Пока только js и css
                     }
@@ -47,9 +51,12 @@ function addPrefix(src, pkg) {
                     min[i] = {};
                     for(k in src[i]) {
                         if(src[i].hasOwnProperty(k) && src[i][k].length) {
-                            src[i][k] = src[i][k].map(function(item) {
+                            for(j = 0; j < src[i][k].length; j++) {
+                                src[i][k][j] = dir.src + '/' + src[i][k][j];
+                            }
+                            /*src[i][k] = src[i][k].map(function(item) {
                                 return dir.src + '/' + item;
-                            });
+                            });*/
                             if(pkg) {
                                 min[i][k] = dir.dist + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
                             }
@@ -84,12 +91,12 @@ module.exports = function(grunt) {
 
         dir = {
             src: 'dev',
-            dist: 'production'
+            dist: 'production',
         },
 
         // for jasmine testing
         testable = [
-            'js/Tm/util.js'
+            'js/Tm/util.js',
         ],
 
         // Исходники
@@ -101,7 +108,7 @@ module.exports = function(grunt) {
                 'vendor/jquery/jquery.js',
 
                 'js/Tm/util.js',
-                'js/app.js'
+                'js/app.js',
             ],
             css: [
                 'css/basic.css',
@@ -112,14 +119,14 @@ module.exports = function(grunt) {
             // Или объектом
             js: {
                 early: [
-                    'js/Tm/util.js'
+                    'js/Tm/util.js',
                 ],
                 common: [
-                    'js/app.js'
+                    'js/app.js',
                 ],
                 vendor: [
                     'vendor/modernizr/modernizr.js',
-                    'vendor/jquery/jquery.js'
+                    'vendor/jquery/jquery.js',
                 ]
             },
             css: {
@@ -148,12 +155,11 @@ module.exports = function(grunt) {
 
 
 
-    tmp = addPrefix(src, pkg);
+    tmp = addPrefix(dir, src, pkg);
     src = tmp.src;
     min = tmp.min;
 
-    testable = addPrefix(testable);
-
+    testable = addPrefix(dir, testable);
 
 
     grunt.initConfig({
@@ -183,7 +189,7 @@ module.exports = function(grunt) {
                     '<%= dir.src %>/*.html',
                     '{.tmp,<%= dir.src %>}/css/{,*/}*.css',
                     '{.tmp,<%= dir.src %>}/js/{,*/}*.js',
-                    '<%= dir.src %>/i/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+                    '<%= dir.src %>/i/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
                 ]
                 // tasks: [ 'livereload' ]
             }
@@ -244,21 +250,33 @@ module.exports = function(grunt) {
             options: {
                 specs: 'spec/**/*.js',
                 vendor: [
-                  '<%= dir.src %>/vendor/jquery/jquery.js'
+                    '<%= dir.src %>/vendor/jquery/jquery.js',
                 ]
             }
         },
 
         jshint: {
             options: {
-                jshintrc: '.jshintrc'
+                "globals": {
+                    "jQuery": true,
+                    "node": true
+                },
+                "asi": true,
+                "laxcomma": true,
+                "expr": true,
+                "boss": true,
+                "proto": true,
             },
-            grunt: [
-                'Gruntfile.js'
-            ],
-            src: [
-                src.js
-            ]
+            src: src.js,
+
+            grunt: {
+                options: {
+                    '-W097': true,
+                    '-W070': true,
+                    '-W117': true,
+                },
+                src: ['Gruntfile.js']
+            },
         },
 
         uglify: {
@@ -279,7 +297,7 @@ module.exports = function(grunt) {
                     beautify: false
                 },
                 files: {
-                    '<%= min_files.js.early %>': src.js.early
+                    '<%= min_files.js.early %>': src.js.early,
                 }
             },
             common: {
@@ -288,7 +306,7 @@ module.exports = function(grunt) {
                     beautify: false
                 },
                 files: {
-                    '<%= min_files.js.common %>': src.js.common
+                    '<%= min_files.js.common %>': src.js.common,
                 }
             },
             vendor: {
@@ -297,7 +315,7 @@ module.exports = function(grunt) {
                     beautify: false
                 },
                 files: {
-                    '<%= min_files.js.vendor %>': src.js.vendor
+                    '<%= min_files.js.vendor %>': src.js.vendor,
                 }
             }
         },
@@ -305,7 +323,7 @@ module.exports = function(grunt) {
         cssmin: {
             /*main: {
                 files: {
-                    '<%= min_files.css %>': src.css
+                    '<%= min_files.css %>': src.css,
                 },
                 options: {
                     banner: '<%= meta.banner %>'
@@ -317,7 +335,7 @@ module.exports = function(grunt) {
                     banner: '<%= meta.banner %>'
                 },
                 files: {
-                    '<%= min_files.css.common %>': src.css.common
+                    '<%= min_files.css.common %>': src.css.common,
                 }
             }
         },
@@ -327,7 +345,7 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     curlyTags: {
-                        version: '<%= pkg.version %>'
+                        version: '<%= pkg.version %>',
                     }
                 },
                 files: {
@@ -388,39 +406,28 @@ module.exports = function(grunt) {
         ]);
     });
 
-    /*grunt.renameTask('regarde', 'watch');
-
-    grunt.registerTask('server', function (target) {
-        if(target === 'dist') {
-            return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
-        }
-
-        grunt.task.run([
-            'clean:server',
-            // 'coffee:dist',
-            // 'compass:server',
-            'livereload-start',
-            'connect:livereload',
-            'open',
-            'watch'
-        ]);
-    });*/
-
     /****************************************************/
 
     grunt.registerTask('js', [
-        // 'jshint:grunt',
-        // 'jshint:src',
-        // 'uglify:main'
+        'jshint:grunt',
+        'jshint:src',
+        'uglify:early',
+        'uglify:common',
+        'uglify:vendor',
     ]);
 
     grunt.registerTask('css', [
-        // 'cssmin:main'
+        'cssmin:common',
+    ]);
+
+    grunt.registerTask('html', [
+        'targethtml',
     ]);
 
     grunt.registerTask('build', [
-        // 'js',
-        // 'css'
+        'js',
+        'css',
+        'html',
     ]);
 
 };
