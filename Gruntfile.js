@@ -1,10 +1,10 @@
 'use strict';
+
 var LIVERELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
-var mountFolder = function (connect, dir) {
+var mountFolder = function(connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
-
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -12,73 +12,68 @@ var mountFolder = function (connect, dir) {
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function(grunt) {
-    // show elapsed time at the end
-    require('time-grunt')(grunt);
 
-    /*var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
+/**
+ * Пробежим по src и добавим в путь префикс dir.src/
+ * и создадим список минифицированных результирующих файлов
+ *
+ * @param {[type]} src [description]
+ * @param {[type]} pkg Если не указан, возвращает только src
+ *
+ * @return Возвращает { src: src, min: min }
+ */
+function addPrefix(src, pkg) {
+    var i, k, min;
 
-    var mountFolder = function(connect, dir) {
-        return connect.static(require('path').resolve(dir));
-    };*/
+    min = {};
 
-    // load all grunt tasks
-    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-
-
-
-    /**
-     * Пробежим по src и добавим в путь префикс dir.src/
-     * и создадим список минифицированных результирующих файлов
-     *
-     * @param {[type]} src [description]
-     * @param {[type]} pkg Если не указан, возвращает только src
-     *
-     * @return Возвращает { src: src, min: min }
-     */
-    function addPrefix(src, pkg) {
-        var i, k, min;
-
-        min = {};
-
-        if(src.length) {
-            src = src.map(function(item) {
-                return dir.src + '/' + item;
-            });
-        }
-        else {
-            for(i in src) {
-                if(src.hasOwnProperty(i)) {
-                    if(src[i].length) { // Array
-                        src[i] = src[i].map(function(item) {
-                            return dir.src + '/' + item;
-                        })
-                        if(pkg) {
-                            min[i] = dir.dist + '/' + i + '/' + pkg.name.toLowerCase() + '.min.v' + pkg.version + '.' + i; // Пока только js и css
-                        }
+    if(src.length) {
+        src = src.map(function(item) {
+            return dir.src + '/' + item;
+        });
+    }
+    else {
+        for(i in src) {
+            if(src.hasOwnProperty(i)) {
+                if(src[i].length) { // Array
+                    src[i] = src[i].map(function(item) {
+                        return dir.src + '/' + item;
+                    })
+                    if(pkg) {
+                        min[i] = dir.dist + '/' + i + '/' + pkg.name.toLowerCase() + '.min.v' + pkg.version + '.' + i; // Пока только js и css
                     }
-                    else { // Object
-                        min[i] = {};
-                        for(k in src[i]) {
-                            if(src[i].hasOwnProperty(k) && src[i][k].length) {
-                                src[i][k] = src[i][k].map(function(item) {
-                                    return dir.src + '/' + item;
-                                });
-                                if(pkg) {
-                                    min[i][k] = dir.dist + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
-                                }
+                }
+                else { // Object
+                    min[i] = {};
+                    for(k in src[i]) {
+                        if(src[i].hasOwnProperty(k) && src[i][k].length) {
+                            src[i][k] = src[i][k].map(function(item) {
+                                return dir.src + '/' + item;
+                            });
+                            if(pkg) {
+                                min[i][k] = dir.dist + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
                             }
                         }
                     }
                 }
             }
         }
-
-        return (pkg ? {
-            src: src,
-            min: min
-        } : src);
     }
+
+    return (pkg ? {
+        src: src,
+        min: min
+    } : src);
+}
+
+
+
+module.exports = function(grunt) {
+    // show elapsed time at the end
+    require('time-grunt')(grunt);
+
+    // load all grunt tasks
+    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
 
 
