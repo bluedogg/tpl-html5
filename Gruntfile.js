@@ -114,7 +114,7 @@ module.exports = function(grunt) {
             ],
             css: [
                 'css/basic.css',
-                'css/common.css',
+                'css/main.css',
             ],
             */
 
@@ -135,7 +135,7 @@ module.exports = function(grunt) {
                 common: [
                     // 'lib/bootstrap/css/bootstrap.css',
                     'css/basic.css',
-                    'css/common.css',
+                    'css/main.css',
                 ],
             }
 
