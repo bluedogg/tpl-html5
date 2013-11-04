@@ -325,6 +325,28 @@ Tm.util = (function(global) {
 
 
         /**
+         * Extends objects
+         *
+         * @param  {object} obj, obj_1, ..., obj_n
+         *
+         * @return {[type]} [description]
+         */
+        extend: function() {
+            var i, key;
+
+            for(i = 1; i < arguments.length; i++) {
+                for(key in arguments[i]) {
+                    if(arguments[i].hasOwnProperty(key)) {
+                        arguments[0][key] = arguments[i][key];
+                    }
+                }
+            }
+
+            return arguments[0];
+        },
+
+
+        /**
          * Вешает варнинг на обновление, закрытие или уход со страницы
          *
          * @param  {[type]} msg если сообщение пустое, то хэндлер прибивается
