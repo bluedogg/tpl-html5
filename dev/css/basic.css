@@ -91,11 +91,13 @@ p
 {
     background-color: #0a246a;
     color: #fff;
+    text-shadow: none;
 }
 ::selection
 {
     background-color: #0a246a;
     color: #fff;
+    text-shadow: none;
 }
 
 /**************************************/
