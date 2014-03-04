@@ -36,10 +36,15 @@ Tm.util = (function(global) {
             os = ua.match(/(os\sx|windows|linux)/ig),
             mobile = ua.match(/(mobile)/ig);
 
-        engine = engine[0].toLowerCase() || 'unknown';
-        vendor = vendor[0].toLowerCase() || 'unknown';
-        os = os[0].replace(' ', '').toLowerCase() || 'unknown';
-        mobile = (mobile ? true : false);
+        try {
+            engine = (engine && engine[0].toLowerCase()) || 'unknown';
+            vendor = (vendor && vendor[0].toLowerCase()) || 'unknown';
+            os = (os && os[0].replace(' ', '').toLowerCase()) || 'unknown';
+            mobile = (mobile ? true : false);
+        }
+        catch(e) {
+            global.console && console.log(e, e.message);
+        }
 
         return {
             engine: engine, // webkit | gecko | presto | trident
