@@ -1,6 +1,10 @@
 {
   "name": "Name",
   "version": "0.0.0",
+  "author": {
+    "name": "Name <info@example.com>",
+    "url": "http://example.com"
+  },
   "dependencies": {
     "jquery": "~1.10.2",
     "modernizr": "~2.6.2",

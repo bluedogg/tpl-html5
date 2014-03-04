@@ -89,7 +89,7 @@ module.exports = function(grunt) {
 
     var tmp,
 
-        pkg = grunt.file.readJSON('package.json'),
+        pkg = grunt.file.readJSON('component.json'),
 
         dir = {
             src: 'dev',
@@ -445,22 +445,22 @@ module.exports = function(grunt) {
     /****************************************************/
 
     grunt.registerTask('js', [
-        'jshint',
-        'uglify:early',
-        'uglify:common',
+        'newer:jshint',
+        'newer:uglify:early',
+        'newer:uglify:common',
     ]);
 
     grunt.registerTask('vendor', [
-        'uglify:vendor',
+        'newer:uglify:vendor',
     ]);
 
     grunt.registerTask('css', [
-        'cssmin',
+        'newer:cssmin',
     ]);
 
     grunt.registerTask('html', [
-        'targethtml',
-        'htmlmin',
+        'newer:targethtml',
+        'newer:htmlmin',
     ]);
 
     grunt.registerTask('build', [

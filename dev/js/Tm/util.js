@@ -376,7 +376,7 @@ Tm.util = (function(global) {
          * @param  {[type]} o [description]
          * @return {[type]}   [description]
          */
-        typeof: function(o) {
+        typeOf: function(o) {
             var _match, _type;
 
             if(o && o.nodeType === 1) {
