@@ -394,6 +394,23 @@ Tm.util = (function(global) {
         },
 
 
+        /**
+         * [parseUrl description]
+         *
+         * @param  {[type]} url [description]
+         *
+         * @return window.location (https://developer.mozilla.org/en-US/docs/Web/API/window.location)
+         */
+        parseUrl: function(url) {
+            var a = document.createElement('a');
+
+            a.href = url;
+
+            return a;
+        },
+
+
+
         lazyImageLoad: lazyImageLoad
 
     };
