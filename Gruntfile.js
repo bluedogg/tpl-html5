@@ -142,7 +142,7 @@ module.exports = function(grunt) {
         },
 
         // Минифицированные файлы
-        min = {},
+        min = {}, // автоматом добавляется в addPrefix(), если не задано
 
         /*viewports = [
             '1920x1080', // large desktop screen
