@@ -274,7 +274,7 @@ Tm.util = (function(global) {
                 c++;
             }
 
-            return Tm.util.numberFormat(Math.round(size * 10) / 10, 0, ',', ' ') + ' ' + suffix[c];
+            return Tm.util.numberFormat(Math.round(size * 10) / 10, 0, ',', ' ') + ' ' + suffix[lang][type][c];
         },
 
 
