@@ -247,18 +247,21 @@ Tm.util = (function(global) {
 
 
         /**
-         * [parseSize description]
+         * [getHumanSize description]
          *
          * @param  {[type]} size [description]
+         *
          * @return {[type]}      [description]
          */
         getHumanSize: function(size, type, lang) {
             var suffix = {
                     ru: {
-                        short: ['байт', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ']
+                        short: ['байт', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ'],
+                        long: ['байт', 'Килобай', 'Мегабайт', 'Гигабайт', 'Терабай', 'Петабайт']
                     },
                     en: {
-                        short: ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB']
+                        short: ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'],
+                        long: ['bytes', 'Kilobytes', 'Megabytes', 'Gigabytes', 'Terabytes', 'Petabytes']
                     }
                 },
                 c = 0;
@@ -271,7 +274,7 @@ Tm.util = (function(global) {
                 c++;
             }
 
-            return Math.round(size * 10) / 10 + ' ' + suffix[c];
+            return Tm.util.numberFormat(Math.round(size * 10) / 10, 0, ',', ' ') + ' ' + suffix[c];
         },
 
 
@@ -282,6 +285,7 @@ Tm.util = (function(global) {
          * @param  {[type]} decimals      [description]
          * @param  {[type]} dec_point     [description]
          * @param  {[type]} thousands_sep [description]
+         *
          * @return {[type]}               [description]
          */
         numberFormat: function(number, decimals, dec_point, thousands_sep) {
