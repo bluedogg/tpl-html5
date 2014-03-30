@@ -23,7 +23,7 @@ var mountFolder = function(connect, dir) {
  *
  * @return Возвращает { src: src, min: min }
  */
-function addPrefix(dir, src, pkg) {
+function addPrefix(dir, src, pkg, dist_name) {
     var i, k, j, min;
 
     min = {};
@@ -44,7 +44,7 @@ function addPrefix(dir, src, pkg) {
                         return dir.src + '/' + item;
                     })*/
                     if(pkg) {
-                        min[i] = dir.dist + '/' + i + '/' + pkg.name.toLowerCase() + '.min.v' + pkg.version + '.' + i; // Пока только js и css
+                        min[i] = dir[dist_name] + '/' + i + '/' + pkg.name.toLowerCase() + '.min.v' + pkg.version + '.' + i; // Пока только js и css
                     }
                 }
                 else { // Object
@@ -58,7 +58,7 @@ function addPrefix(dir, src, pkg) {
                                 return dir.src + '/' + item;
                             });*/
                             if(pkg) {
-                                min[i][k] = dir.dist + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
+                                min[i][k] = dir[dist_name] + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
                             }
                         }
                     }
@@ -94,6 +94,7 @@ module.exports = function(grunt) {
         dir = {
             src: 'dev',
             dist: 'production',
+            dist_public: 'production/public',
         },
 
         // for jasmine testing
@@ -157,6 +158,7 @@ module.exports = function(grunt) {
 
 
 
+    //tmp = addPrefix(dir, src, pkg, 'dist_public');
     tmp = addPrefix(dir, src, pkg);
     src = tmp.src;
     min = tmp.min;
@@ -418,6 +420,73 @@ module.exports = function(grunt) {
 
 
 
+        secret: grunt.file.readJSON('secret.json'),
+
+        ftpush_auth: {
+            host: '<%= secret.host %>',
+            port: '<%= secret.port %>',
+            authKey: '[key]' // .ftppass
+        },
+
+        ftpush: {
+            js: {
+                auth: '<%= ftpush_auth %>',
+                src: '<%= dir.dist_public %>/js',
+                dest: '/[dir]/public_html/js',
+                simple: true,
+                exclusions: [
+                    '**/.DS_Store'
+                ]
+            },
+            css: {
+                auth: '<%= ftpush_auth %>',
+                src: '<%= dir.dist_public %>/css',
+                dest: '/[dir]/public_html/css',
+                simple: true,
+                exclusions: [
+                    '**/.DS_Store'
+                ]
+            },
+            html: {
+                auth: '<%= ftpush_auth %>',
+                src: '<%= dir.dist_public %>/css',
+                dest: '/[dir]/public_html',
+                simple: true,
+                exclusions: [
+                    'css', 'js', 'vendor', 'lib'
+                ]
+            },
+            components: {
+                auth: '<%= ftpush_auth %>',
+                src: './',
+                dest: '/[dir]',
+                simple: true,
+                exclusions: [
+                    '**/.DS_Store', 'Gruntfile.js', '.*', 'package.json', 'secret.json', '.git', 'application', 'data', 'library', 'node_modules', 'production', 'public'
+                ]
+            },
+            application: {
+                auth: '<%= ftpush_auth %>',
+                src: 'application',
+                dest: '/[dir]/application',
+                simple: true,
+                exclusions: [
+                    '**/.DS_Store'
+                ]
+            },
+            library: {
+                auth: '<%= ftpush_auth %>',
+                src: 'library',
+                dest: '/[dir]/library',
+                simple: true,
+                exclusions: [
+                    '**/.DS_Store', '.git', '.svn', '.ZendFramework*'
+                ]
+            },
+        },
+
+
+
 
         empty: {}
 
@@ -469,6 +538,23 @@ module.exports = function(grunt) {
         'css',
         'html',
         // 'compress',
+    ]);
+
+    grunt.registerTask('deploy-front', [
+        'ftpush:components',
+        'ftpush:js',
+        'ftpush:css',
+        // 'ftp-deploy',
+    ]);
+
+    grunt.registerTask('deploy-back', [
+        'ftpush:application',
+        'ftpush:library',
+    ]);
+
+    grunt.registerTask('deploy', [
+        'deploy-front',
+        'deploy-back',
     ]);
 
 };
