@@ -3,7 +3,7 @@ body
     margin: 0;
     padding: 0;
     font-size: 16px;
-    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    /*font-family: 'Helvetica Neue', Helvetica, sans-serif;*/
     background: #fff;
     color: #000;
 }
@@ -14,7 +14,10 @@ a:link,
 .b-link,
 .b-link-fresh:visited,
 .b-link-fresh:hover:visited,
-.b-link-fresh:hover
+.b-link-fresh:hover, /* для совместимости со старыми стилями */
+.b-link_fresh_true:visited,
+.b-link_fresh_true:hover:visited,
+.b-link_fresh_true:hover
 {
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -47,37 +50,53 @@ a:focus,
                   outline: none;
 }
 .b-local,
-.b-local:visited
+.b-local:visited, /* для совместимости со старыми стилями */
+.b-link_local_true,
+.b-link_local_true:visited
 {
     color: rgb(0, 142, 232);
     border-bottom-style: dotted !important;
     border-bottom-color: rgba(0, 142, 232, .2);
     border-bottom-width: 1px;
 }
-.b-local:hover
+.b-local:hover, /* для совместимости со старыми стилями */
+.b-link_local_true:hover
 {
     border-color: #f00;
     color: #f00;
 }
-.b-no
+.b-no, /* для совместимости со старыми стилями */
+.b-link_underline_false
 {
     border-bottom-width: 0;
 }
-.b-link_clr_black
+.b-link_clr_black, /* для совместимости со старыми стилями */
+.b-link_color_black
 {
     color: #000 !important;
     border-color: rgba(0, 0, 0, .16) !important;
 }
+.b-link_color_white
+{
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, .16) !important;
+}
 
 /**************************************/
 
+::selection
+{
+    background-color: #0a246a;
+    color: #fff;
+    text-shadow: none;
+}
 ::-moz-selection
 {
     background-color: #0a246a;
     color: #fff;
     text-shadow: none;
 }
-::selection
+::-webkit-selection
 {
     background-color: #0a246a;
     color: #fff;
@@ -114,6 +133,16 @@ a:focus,
 {
     text-align: center !important;
 }
+.b-right, /* для совместимости со старыми стилями */
+.b-align_side_right
+{
+    text-align: right !important;
+}
+.b-align_side_left
+{
+    text-align: left !important;
+}
+
 
 /**************************************/
 
@@ -176,21 +205,9 @@ img
 {
     height: 40px;
 }
-.b-spacer_h_55
+.b-spacer_h_50
 {
-    height: 55px;
-}
-.b-spacer_h_70
-{
-    height: 70px;
-}
-.b-spacer_h_60
-{
-    height: 60px;
-}
-.b-spacer_h_80
-{
-    height: 80px;
+    height: 50px;
 }
 .b-spacer_h_100
 {
@@ -206,13 +223,6 @@ img
 .b-nowrap
 {
     white-space: nowrap;
-}
-
-/***************************************/
-
-.b-right
-{
-    text-align: right;
 }
 
 /***************************************/
