@@ -44,7 +44,7 @@ body
 /**************************************/
 
 /* Force vertical scrollbar */
-/*html { height: 101% }*/
+/*html { height: 101%; }*/
 
 /**************************************/
 
@@ -152,7 +152,7 @@ a > img
     border-bottom: 0 !important;
 }
 
-/* Display URLS In A Printed Webpage: http://www.smipple.net/snippet/bramloquet/Print%20the%20url%20after%20your%20links */;
+/* Display URLS In A Printed Webpage */
 @media print {
     a:after
     {

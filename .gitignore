@@ -2,3 +2,5 @@
 node_modules
 dev/vendor
 production
+
+secret.json
