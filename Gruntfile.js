@@ -23,15 +23,16 @@ var mountFolder = function(connect, dir) {
  * @param {[type]} dir [description]
  * @param {[type]} src [description]
  * @param {[type]} pkg Если не указан, возвращает только src
+ * @param {[type]} distName Ключ dist-директории (dist, distPublic...)
  *
  * @return Возвращает { src: src, min: min }
  */
-function addPrefix(dir, src, pkg, dist_name) {
+function addPrefix(dir, src, pkg, distName) {
     var i, k, j, min;
 
     min = {};
 
-    dist_name || (dist_name = 'dist');
+    distName || (distName = 'dist');
 
     if(src.length) {
         src = src.map(function(item) {
@@ -49,7 +50,7 @@ function addPrefix(dir, src, pkg, dist_name) {
                         return dir.src + '/' + item;
                     })*/
                     if(pkg) {
-                        min[i] = dir[dist_name] + '/' + i + '/' + pkg.name.toLowerCase() + '.min.v' + pkg.version + '.' + i; // Пока только js и css
+                        min[i] = dir[distName] + '/' + i + '/' + pkg.name.toLowerCase() + '.min.v' + pkg.version + '.' + i; // Пока только js и css
                     }
                 }
                 else { // Object
@@ -63,7 +64,7 @@ function addPrefix(dir, src, pkg, dist_name) {
                                 return dir.src + '/' + item;
                             });*/
                             if(pkg) {
-                                min[i][k] = dir[dist_name] + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
+                                min[i][k] = dir[distName] + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
                             }
                         }
                     }
@@ -92,77 +93,75 @@ module.exports = function(grunt) {
 
 
 
-    var tmp,
+    var pkg = grunt.file.readJSON('component.json');
 
-        pkg = grunt.file.readJSON('component.json'),
+    /*var viewports = [
+        '1920x1080', // large desktop screen
+        '1280x1024', // standart desktop screen
+        '1024x768',  // minimum desktop screen
+        '768x1024',  // iPad
+        '640x960',   // iPhone
+        '320x240'    // shitty phone
+    ];*/
+    var viewports = ['320x480','480x320','384x640','640x384','602x963','963x602','600x960','960x600','800x1280','1280x800','768x1024','1024x768'];
 
-        dir = {
-            src: 'dev',
-            dist: 'dist',
-            dist_public: 'production/public',
-        },
+    var dir = {
+        src: 'dev',
+        dist: 'dist',
+        distPublic: 'production/public',
+    };
 
-        // for jasmine testing
-        testable = [
+    // for jasmine testing
+    var testable = [
+        'js/Tm/util.js',
+    ];
+
+    // Исходники
+    var src = {
+        /*
+        // Может быть массивом
+        js: [
+            'vendor/modernizr/modernizr.js',
+            'vendor/jquery/jquery.js',
+
             'js/Tm/util.js',
+            'js/app.js',
         ],
+        css: [
+            'css/basic.css',
+            'css/main.css',
+        ],
+        */
 
-        // Исходники
-        src = {
-            /*
-            // Может быть массивом
-            js: [
-                'vendor/modernizr/modernizr.js',
-                'vendor/jquery/jquery.js',
-
+        // Или объектом
+        js: {
+            early: [
                 'js/Tm/util.js',
                 'js/app.js',
             ],
-            css: [
+            common: [
+                'js/app.js',
+            ],
+        },
+        css: {
+            common: [
+                // 'lib/bootstrap/css/bootstrap.css',
                 'css/basic.css',
                 'css/main.css',
             ],
-            */
-
-            // Или объектом
-            js: {
-                early: [
-                    'js/Tm/util.js',
-                ],
-                common: [
-                    'js/app.js',
-                ],
-            },
-            css: {
-                common: [
-                    // 'lib/bootstrap/css/bootstrap.css',
-                    'css/basic.css',
-                    'css/main.css',
-                ],
-            }
-
-        },
-
-        // Минифицированные файлы
-        min = {}, // автоматом добавляется в addPrefix(), если не задано
-
-        /*viewports = [
-            '1920x1080', // large desktop screen
-            '1280x1024', // standart desktop screen
-            '1024x768',  // minimum desktop screen
-            '768x1024',  // iPad
-            '640x960',   // iPhone
-            '320x240'    // shitty phone
-        ];*/
-
-        viewports = ['320x480','480x320','384x640','640x384','602x963','963x602','600x960','960x600','800x1280','1280x800','768x1024','1024x768'];
+        }
+    };
 
 
 
-    //tmp = addPrefix(dir, src, pkg, 'dist_public');
-    tmp = addPrefix(dir, src, pkg);
+
+    //tmp = addPrefix(dir, src, pkg, 'distPublic');
+    var tmp = addPrefix(dir, src, pkg);
     src = tmp.src;
-    min = tmp.min;
+
+    // Минифицированные файлы. Автоматом добавляются в addPrefix(), если не заданы
+    var min = tmp.min || {};
+
 
     testable = addPrefix(dir, testable);
 
@@ -180,7 +179,8 @@ module.exports = function(grunt) {
 
 
         dir: dir,
-        min_files: min,
+        min: min,
+        src: src,
 
         /****************************************************/
 
@@ -211,7 +211,7 @@ module.exports = function(grunt) {
                         return [
                             liveReloadSnippet,
                             mountFolder(connect, '.tmp'),
-                            mountFolder(connect, dir.src)
+                            mountFolder(connect, '<%= dir.src %>')
                         ];
                     }
                 }
@@ -230,7 +230,7 @@ module.exports = function(grunt) {
                 options: {
                     middleware: function(connect) {
                         return [
-                            mountFolder(connect, dir.dist)
+                            mountFolder(connect, '<%= dir.dist %>')
                         ];
                     }
                 }
@@ -266,7 +266,7 @@ module.exports = function(grunt) {
                 "boss": true,
                 "proto": true,
             },
-            src: src.js,
+            src: '<%= src.js %>',
 
             grunt: {
                 options: {
@@ -286,8 +286,8 @@ module.exports = function(grunt) {
                 },
                 src: '<%= dir.src %>/js/**'
                 /*files: {
-                    src: src.js
-                    // src: '<%= min_files.js %>'
+                    src: '<%= src.js %>''
+                    // src: '<%= min.js %>'
                 }*/
             }
         },
@@ -297,13 +297,14 @@ module.exports = function(grunt) {
         /* Тесты *********************/
 
         jasmine: {
-            src: testable,
             options: {
                 specs: 'spec/**/*.js',
+                display: 'short',
                 vendor: [
                     '<%= dir.src %>/vendor/jquery/jquery.js',
                 ]
-            }
+            },
+            src: testable,
         },
 
 
@@ -314,11 +315,14 @@ module.exports = function(grunt) {
             options: {
                 banner: '<%= meta.banner %>',
                 mangle: true,
-                beautify: false
+                beautify: false,
+                compress: {
+                    drop_console: true
+                }
             },
             /*all: {
                 files: {
-                    '<%= min_files.js %>': src.js
+                    '<%= min.js %>': '<%= src.js %>''
                 }
             },*/
 
@@ -326,23 +330,37 @@ module.exports = function(grunt) {
                 options: {
                 },
                 files: {
-                    '<%= min_files.js.early %>': src.js.early,
+                    '<%= min.js.early %>': '<%= src.js.early %>',
                 }
             },
             common: {
                 options: {
                 },
                 files: {
-                    '<%= min_files.js.common %>': src.js.common,
+                    '<%= min.js.common %>': '<%= src.js.common %>',
                 }
             },
+
+            // Жмём каждый *.js отдельно
+            /*separately: {
+                options: {
+                },
+                files: [{
+                    expand: true,                           // Enable dynamic expansion.
+                    cwd: '<%= dir.src %>',                  // Src matches are relative to this path.
+                    src: '<%= src.js.early %>',             // Actual pattern(s) to match.
+                    dest: '<%= dir.dist %>',                // Destination path prefix.
+                    ext: '.min.v' + pkg.version + '.js',    // Dest filepaths will have this extension.
+                    extDot: 'last'                          // Extensions in filenames begin after the last dot
+                }],
+            },*/
         },
 
 
         cssmin: {
             /*all: {
                 files: {
-                    '<%= min_files.css %>': src.css,
+                    '<%= min.css %>': '<%= src.css %>',
                 },
                 options: {
                     banner: '<%= meta.banner %>'
@@ -354,7 +372,7 @@ module.exports = function(grunt) {
                     banner: '<%= meta.banner %>'
                 },
                 files: {
-                    '<%= min_files.css.common %>': src.css.common,
+                    '<%= min.css.common %>': '<%= src.css.common %>',
                 }
             }
         },
@@ -405,6 +423,10 @@ module.exports = function(grunt) {
 
 
 
+
+
+
+
         /*autoshot: {
             default_options: {
                 options: {
@@ -444,7 +466,7 @@ module.exports = function(grunt) {
             // Явное указание путей
             /*explicit: {
                 src: '<%= dir.dist %>/{js,css}/**',
-                dest: '<%= dir.dist_public %>',
+                dest: '<%= dir.distPublic %>',
                 // filter: 'isFile'
             },*/
             // These examples using "expand" to generate src-dest file mappings:
@@ -456,7 +478,7 @@ module.exports = function(grunt) {
                     overwrite: false,
                     cwd: '<%= dir.dist %>',
                     src: ['js/**', 'css/**'], // [dir.dist] -> /js/**, /css/**
-                    dest: '<%= dir.dist_public %>',
+                    dest: '<%= dir.distPublic %>',
                     filter: 'isFile'
                     // filter: 'isDirectory'
                 }]
@@ -467,6 +489,7 @@ module.exports = function(grunt) {
 
 
 
+        /* Деплой ***************/
 
         secret: grunt.file.readJSON('secret.json'),
 
@@ -479,7 +502,7 @@ module.exports = function(grunt) {
         ftpush: {
             js: {
                 auth: '<%= ftpush_auth %>',
-                src: '<%= dir.dist_public %>/js',
+                src: '<%= dir.distPublic %>/js',
                 dest: '/[dir]/public_html/js',
                 simple: true,
                 exclusions: [
@@ -488,7 +511,7 @@ module.exports = function(grunt) {
             },
             css: {
                 auth: '<%= ftpush_auth %>',
-                src: '<%= dir.dist_public %>/css',
+                src: '<%= dir.distPublic %>/css',
                 dest: '/[dir]/public_html/css',
                 simple: true,
                 exclusions: [
@@ -497,7 +520,7 @@ module.exports = function(grunt) {
             },
             html: {
                 auth: '<%= ftpush_auth %>',
-                src: '<%= dir.dist_public %>/css',
+                src: '<%= dir.distPublic %>/css',
                 dest: '/[dir]/public_html',
                 simple: true,
                 exclusions: [
@@ -585,7 +608,6 @@ module.exports = function(grunt) {
 
         grunt.task.run([
             'clean:server',
-            // 'livereload-start',
             'connect:livereload',
             'open:server',
             'watch'
@@ -597,7 +619,7 @@ module.exports = function(grunt) {
     grunt.registerTask('js', [
         'newer:jshint',
         'newer:jscs',
-        'newer:uglify',
+        'newer:jasmine',
         'newer:uglify',
     ]);
 
