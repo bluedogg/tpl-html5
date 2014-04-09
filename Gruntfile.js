@@ -162,7 +162,6 @@ module.exports = function(grunt) {
     // Минифицированные файлы. Автоматом добавляются в addPrefix(), если не заданы
     var min = tmp.min || {};
 
-
     testable = addPrefix(dir, testable);
 
     grunt.initConfig({
@@ -211,7 +210,7 @@ module.exports = function(grunt) {
                         return [
                             liveReloadSnippet,
                             mountFolder(connect, '.tmp'),
-                            mountFolder(connect, '<%= dir.src %>')
+                            mountFolder(connect, dir.src) // почему-то не работает с '<%= dir.src %>'
                         ];
                     }
                 }
@@ -230,7 +229,7 @@ module.exports = function(grunt) {
                 options: {
                     middleware: function(connect) {
                         return [
-                            mountFolder(connect, '<%= dir.dist %>')
+                            mountFolder(connect, dir.dist) // почему-то не работает с '<%= dir.dist %>'
                         ];
                     }
                 }
