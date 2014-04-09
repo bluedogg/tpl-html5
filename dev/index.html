@@ -11,11 +11,7 @@
     <meta name="description" content="Description" />
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /> -->
 
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="apple-touch-icon" href="i/touch-icon-iphone.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="i/touch-icon-ipad.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="i/touch-icon-iphone-retina.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="i/touch-icon-ipad-retina.png">
+@@include('favicon-and-touch.html')
 
     <!--(if target dev)><!-->
         <!-- <link href="vendor/bootstrap-3/css/bootstrap.css" rel="stylesheet" type="text/css" /> -->
@@ -31,16 +27,8 @@
 </head>
 
 <body>
-    <!--[if lt IE 7]>
-        <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-    <![endif]-->
 
-    <!--[if lt IE 9]>
-        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/selectivizr/1.0.2/selectivizr-min.js"></script>
-        <script src="vendor/es5-shim/es5-shim.min.js"></script>
-        <script src="vendor/json3/lib/json3.min.js"></script>
-    <![endif]-->
+@@include('ie-conditionals.html')
 
     <p>Hello, developer!</p>
 
@@ -53,9 +41,7 @@
 
 
 
-    <footer class="b-footer">
-        <div>&#0169;&#160;<span class="fn org">ООО «Компания»</span>, <script type="text/javascript">(function() { var beginY = 2000, dt = new Date(); document.write((beginY == dt.getFullYear() ? '' : '' + beginY + '&#0151;') + dt.getFullYear()); })();</script></div>
-    </footer>
+@@include('footer.html')
 
     <!--(if target dev)><!-->
         <script src="vendor/jquery/jquery.min.js"></script>
@@ -74,15 +60,7 @@
     <!(endif)-->
 
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <!--(if target dist)>
-    <script>
-        var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-        g.src='//www.google-analytics.com/ga.js';
-        s.parentNode.insertBefore(g,s)}(document,'script'));
-    </script>
-    <!(endif)-->
+@@include('google-analytics.html')
 
 </body>
 </html>

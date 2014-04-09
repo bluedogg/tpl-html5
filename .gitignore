@@ -3,6 +3,8 @@ node_modules
 dev/vendor
 production
 dist
+.tmp
 
 secret.json
+
 

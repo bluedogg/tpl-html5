@@ -5,6 +5,8 @@ var liveReloadSnippet = require('connect-livereload')({
     port: LIVERELOAD_PORT
 });
 var mountFolder = function(connect, dir) {
+    console.log('dir', dir);
+    console.log('dir', require('path').resolve(dir));
     return connect.static(require('path').resolve(dir));
 };
 
@@ -186,17 +188,24 @@ module.exports = function(grunt) {
         watch: {
             livereload: {
                 options: {
-                    livereload: LIVERELOAD_PORT
+                    livereload: LIVERELOAD_PORT,
+                    // atBegin: true,
+                    nospawn : true,
+                    // reload: true, // Автоматом перезапускает таск, при изменении Gruntfile.js
                 },
-                // tasks: ['jshint'],
+                tasks: ['includereplace:livereload'],
                 files: [
-                    '{.tmp,<%= dir.src %>}/{,**}/*.html',
-                    '{.tmp,<%= dir.src %>}/css/{,**/}*.css',
-                    '{.tmp,<%= dir.src %>}/js/{,**/}*.js',
-                    // '<%= dir.src %>/i/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+                    // 'Gruntfile.js',
+                    // '{.tmp,<%= dir.src %>}/{,**}/*.html',
+                    // '{.tmp,<%= dir.src %>}/css/{,**/}*.css',
+                    // '{.tmp,<%= dir.src %>}/js/{,**/}*.js',
+                    '<%= dir.src %>/{,**}/*.html',
+                    '<%= dir.src %>/css/{,**/}*.css',
+                    '<%= dir.src %>/js/{,**/}*.js',
                 ]
             }
         },
+
         connect: {
             options: {
                 port: 9000,
@@ -209,8 +218,8 @@ module.exports = function(grunt) {
                     middleware: function(connect) {
                         return [
                             liveReloadSnippet,
-                            mountFolder(connect, '.tmp'),
-                            mountFolder(connect, dir.src) // почему-то не работает с '<%= dir.src %>'. Бля, потому что это функция!
+                            mountFolder(connect, '.tmp/' + dir.src),
+                            mountFolder(connect, dir.src)
                         ];
                     }
                 }
@@ -229,20 +238,21 @@ module.exports = function(grunt) {
                 options: {
                     middleware: function(connect) {
                         return [
-                            mountFolder(connect, dir.dist) // почему-то не работает с '<%= dir.dist %>'. Бля, потому что это функция!
+                            mountFolder(connect, dir.dist)
                         ];
                     }
                 }
             }
         },
+
         open: {
             server: {
                 path: 'http://localhost:<%= connect.options.port %>'
             }
         },
+
         clean: {
             dist: [
-                '.tmp',
                 '<%= dir.dist %>/*',
             ],
             server: '.tmp'
@@ -377,6 +387,32 @@ module.exports = function(grunt) {
         },
 
 
+        includereplace: {
+            options: {
+                includesDir: '<%= dir.src %>/inc/',
+            },
+            livereload: {
+                files: {
+                    '.tmp/': '<%= dir.src %>/*.html'
+                }
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= dir.src %>',
+                    src: [
+                        '**/*.html',
+                        '!inc/**',
+                        '!vendor/**',
+                        '!lib/**',
+                    ],
+                    dest: '<%= dir.dist %>'
+                }]
+            }
+        },
+
+
+
         targethtml: {
             dist: {
                 options: {
@@ -386,9 +422,10 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= dir.src %>',
+                    cwd: '<%= dir.dist %>',
                     src: [
                         '**/*.html',
+                        '!inc/**',
                         '!vendor/**',
                         '!lib/**',
                     ],
@@ -591,10 +628,14 @@ module.exports = function(grunt) {
 
     });
 
+
+
     /****************************************************/
 
     grunt.registerTask('default', [
     ]);
+
+    /****************************************************/
 
     grunt.registerTask('server', function(target) {
         if(target === 'dist') {
@@ -607,10 +648,18 @@ module.exports = function(grunt) {
 
         grunt.task.run([
             'clean:server',
+            'includereplace:livereload',
             'connect:livereload',
             'open:server',
             'watch'
         ]);
+
+        grunt.event.on('watch', function(action, filepath, target) {
+            grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
+            console.log('===========', grunt.config('includereplace.livereload'));
+            grunt.config('includereplace.livereload.files', {'.tmp/': filepath});
+            console.log('___________', grunt.config('includereplace.livereload'));
+        });
     });
 
     /****************************************************/
@@ -627,6 +676,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('html', [
+        'newer:includereplace:dist',
         'newer:targethtml',
         'newer:htmlmin',
     ]);
