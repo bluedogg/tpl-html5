@@ -264,6 +264,23 @@ module.exports = function(grunt) {
         },
 
 
+        htmlhint: {
+            htmlhintrc: '.htmlhintrc',
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= dir.src %>',
+                    src: [
+                        '**/*.html',
+                        '!inc/**',
+                        '!vendor/**',
+                        '!lib/**',
+                    ],
+                }]
+            },
+        },
+
+
 
         /* Тесты *********************/
 
