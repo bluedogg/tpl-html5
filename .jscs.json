@@ -1,0 +1,66 @@
+{
+    "excludeFiles": [
+        "node_modules/**",
+        "vendor/**",
+        "lib/**",
+        "Gruntfile.js"
+    ],
+    "requireCurlyBraces": ["if", "else", "for", "while", "do", "try", "catch", "switch"],
+    "requireSpaceAfterKeywords": ["else", "do", "return", "try"],
+    "disallowSpaceAfterKeywords": ["if", "for", "while", "switch", "catch"],
+    "disallowLeftStickedOperators": ["?", "+", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+    "disallowRightStickedOperators": ["?", "+", "/", "*", ":", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+    "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
+    "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
+    "requireSpaceBeforeBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!=="],
+    "requireSpaceAfterBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!=="],
+    "requireKeywordsOnNewLine": ["else"],
+    "requireCamelCaseOrUpperCaseIdentifiers": true,
+    "disallowMultipleLineStrings": true,
+    "requireRightStickedOperators": ["!", "."],
+    "requireLeftStickedOperators": [","],
+    "disallowKeywords": ["with"],
+    "disallowMixedSpacesAndTabs": true,
+    "requireParenthesesAroundIIFE": true,
+    "requireSpacesInFunctionExpression": {
+        "beforeOpeningRoundBrace": false,
+        "beforeOpeningCurlyBrace": true
+    },
+    "requireSpacesInAnonymousFunctionExpression": {
+        "beforeOpeningCurlyBrace": true
+    },
+    "requireSpacesInNamedFunctionExpression": {
+        "beforeOpeningCurlyBrace": true
+    },
+    "requireSpacesInFunctionExpression": {
+        "beforeOpeningCurlyBrace": true
+    },
+    "disallowQuotedKeysInObjects": true,
+    "disallowDanglingUnderscores": true,
+    "disallowTrailingWhitespace": true,
+    "disallowSpaceAfterObjectKeys": true,
+    "requireCommaBeforeLineBreak": true,
+    "requireBlocksOnNewline": true,
+    "requireLineFeedAtFileEnd": true,
+    "excludeFiles": ["test/data/**"],
+    "requireSpacesInFunctionExpression": {
+        "beforeOpeningCurlyBrace": true
+    },
+    "disallowSpacesInFunctionExpression": {
+        "beforeOpeningRoundBrace": true
+    },
+    "validateJSDoc": {
+        "checkParamNames": true,
+        "requireParamTypes": true
+    },
+    "validateQuoteMarks": "'",
+    "validateIndentation": 4,
+    "requireCapitalizedConstructors": true,
+    "safeContextKeyword": ["that"],
+    "requireDotNotation": true,
+    "validateJSDoc": {
+        "checkParamNames": true,
+        "checkRedundantParams": true,
+        "requireParamTypes": true
+    }
+}

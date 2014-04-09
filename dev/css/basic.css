@@ -272,6 +272,7 @@ ul
 img
 {
     display: block;
+    border: 0;
 }
 .b-img_inline_true
 {
@@ -305,6 +306,7 @@ img
 .b-divider
 {
     height: 1px;
+    border: 0;
 }
 .b-divider_height_2
 {

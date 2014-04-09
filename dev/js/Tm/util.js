@@ -30,11 +30,13 @@ Tm.util = (function(global) {
      * @return {[type]} [description]
      */
     var browser = (function() {
-        var ua = navigator.userAgent.toLowerCase(),
-            engine = ua.match(/(webkit|gecko|presto|trident)/ig),
-            vendor = ua.match(/(firefox|safari|chrome|opera|msie)/ig),
-            os = ua.match(/(os\sx|windows|linux)/ig),
-            mobile = ua.match(/(mobile)/ig);
+        var ua, engine, vendor, os, mobile;
+
+        ua = navigator.userAgent.toLowerCase();
+        engine = ua.match(/(webkit|gecko|presto|trident)/ig);
+        vendor = ua.match(/(firefox|safari|chrome|opera|msie)/ig);
+        os = ua.match(/(os\sx|windows|linux)/ig);
+        mobile = ua.match(/(mobile)/ig);
 
         try {
             engine = (engine && engine[0].toLowerCase()) || 'unknown';
@@ -65,7 +67,7 @@ Tm.util = (function(global) {
      * @return {[type]} [description]
      */
     var lazyImageLoad = function() {
-        var imgs, imgi, len, src, img, ratio, width_real, height_real, width_new, height_new,
+        var imgs, imgi, len, src, img, ratio, widthReal, heightReal, widthNew, heightNew,
             imgsPending = [];
 
         function onloadHandler() {
@@ -88,27 +90,27 @@ Tm.util = (function(global) {
                 ratio = imgi.getAttribute('data-ratio');
                 // Соотношение есть
                 if(ratio) {
-                    width_real = imgi.getAttribute('width');
-                    height_real = imgi.getAttribute('height');
-                    width_new = imgi.parentNode.offsetWidth;
+                    widthReal = imgi.getAttribute('width');
+                    heightReal = imgi.getAttribute('height');
+                    widthNew = imgi.parentNode.offsetWidth;
                     // Ширина меньше контейнера, ок, выставим реальное и не паримся
-                    if(width_real <= width_new) {
-                        width_new = width_real;
-                        height_new = height_real;
+                    if(widthReal <= widthNew) {
+                        widthNew = widthReal;
+                        heightNew = heightReal;
                     }
                     // Не, картинка шире, надо посчитать высоту
                     else {
-                        height_new = Math.round(width_new / ratio);
+                        heightNew = Math.round(widthNew / ratio);
                     }
                 }
-                // console.log(ratio, imgi.parentNode, width_real, 'x', height_real, ' | ', width_new, 'x', height_new);
+                // console.log(ratio, imgi.parentNode, widthReal, 'x', heightReal, ' | ', widthNew, 'x', heightNew);
                 if(src) {
                     img = new Image();
                     img.onload = onloadHandler;
                     img.setAttribute('data-i', i);
 
-                    imgi.style.width = width_new + 'px';
-                    imgi.style.height = height_new + 'px';
+                    imgi.style.width = widthNew + 'px';
+                    imgi.style.height = heightNew + 'px';
 
                     // img.src = src;
                     imgsPending.push({
@@ -228,7 +230,9 @@ Tm.util = (function(global) {
          * @return {string} если не нашли, то -1
          */
         getMonthName: function(monthNum, type, lang) {
-            var MONTH_NAMES = {
+            var MONTH_NAMES;
+
+            MONTH_NAMES = {
                 ru: {
                     full: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
                     full2: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
@@ -254,17 +258,19 @@ Tm.util = (function(global) {
          * @return {[type]}      [description]
          */
         getHumanSize: function(size, type, lang) {
-            var suffix = {
-                    ru: {
-                        short: ['байт', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ'],
-                        long: ['байт', 'Килобай', 'Мегабайт', 'Гигабайт', 'Терабай', 'Петабайт']
-                    },
-                    en: {
-                        short: ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'],
-                        long: ['bytes', 'Kilobytes', 'Megabytes', 'Gigabytes', 'Terabytes', 'Petabytes']
-                    }
+            var SUFFIX;
+
+            SUFFIX = {
+                ru: {
+                    short: ['байт', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ'],
+                    long: ['байт', 'Килобай', 'Мегабайт', 'Гигабайт', 'Терабай', 'Петабайт']
                 },
-                c = 0;
+                en: {
+                    short: ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'],
+                    long: ['bytes', 'Kilobytes', 'Megabytes', 'Gigabytes', 'Terabytes', 'Petabytes']
+                }
+            },
+            c = 0;
 
             type = type || 'short';
             lang = lang || 'ru';
@@ -274,7 +280,7 @@ Tm.util = (function(global) {
                 c++;
             }
 
-            return Tm.util.numberFormat(Math.round(size * 10) / 10, 0, ',', ' ') + ' ' + suffix[lang][type][c];
+            return Tm.util.numberFormat(Math.round(size * 10) / 10, 0, ',', ' ') + ' ' + SUFFIX[lang][type][c];
         },
 
 
@@ -283,19 +289,19 @@ Tm.util = (function(global) {
          *
          * @param  {[type]} number        [description]
          * @param  {[type]} decimals      [description]
-         * @param  {[type]} dec_point     [description]
-         * @param  {[type]} thousands_sep [description]
+         * @param  {[type]} decPoint     [description]
+         * @param  {[type]} thousandsSep [description]
          *
          * @return {[type]}               [description]
          */
-        numberFormat: function(number, decimals, dec_point, thousands_sep) {
+        numberFormat: function(number, decimals, decPoint, thousandsSep) {
             var i, z, temp, sign, integer, fractional,
                 exponent = '',
                 numberstr = number.toString(),
                 eindex = numberstr.indexOf('e');
 
             if(number) {
-                thousands_sep || (thousands_sep = ' ');
+                thousandsSep || (thousandsSep = ' ');
 
                 if(eindex > -1) {
                     exponent = numberstr.substring(eindex);
@@ -311,18 +317,18 @@ Tm.util = (function(global) {
                 integer = (number > 0 ? Math.floor(number) : Math.abs(Math.ceil(number))).toString();
 
                 fractional = number.toString().substring(integer.length + sign.length);
-                dec_point = (dec_point !== null ? dec_point : '.');
-                fractional = (decimals !== null && decimals > 0 || fractional.length > 1 ? dec_point + fractional.substring(1) : '');
+                decPoint = (decPoint !== null ? decPoint : '.');
+                fractional = (decimals !== null && decimals > 0 || fractional.length > 1 ? decPoint + fractional.substring(1) : '');
                 if(decimals !== null && decimals > 0) {
                     for(i = fractional.length - 1, z = decimals; i < z; ++i) {
                         fractional += '0';
                     }
                 }
 
-                thousands_sep = ((thousands_sep != dec_point || fractional.length === 0) ? thousands_sep : null);
-                if(thousands_sep !== null && thousands_sep !== '') {
+                thousandsSep = ((thousandsSep != decPoint || fractional.length === 0) ? thousandsSep : null);
+                if(thousandsSep !== null && thousandsSep !== '') {
                     for (i = integer.length - 3; i > 0; i -= 3) {
-                        integer = integer.substring(0 , i) + thousands_sep + integer.substring(i);
+                        integer = integer.substring(0, i) + thousandsSep + integer.substring(i);
                     }
                 }
 
@@ -336,11 +342,11 @@ Tm.util = (function(global) {
         /**
          * Extends objects
          *
-         * @param  {object} obj, obj_1, ..., obj_n
+         * @param  {object} dummy. Любое кол-во расширяемых объектов: obj, obj2, ..., objN
          *
          * @return {[type]} [description]
          */
-        extend: function() {
+        extend: function(dummy) {
             var i, key;
 
             for(i = 1; i < arguments.length; i++) {
@@ -381,20 +387,20 @@ Tm.util = (function(global) {
          * @return {[type]}   [description]
          */
         typeOf: function(o) {
-            var _match, _type;
+            var match, type;
 
             if(o && o.nodeType === 1) {
-                _type = 'element';
+                type = 'element';
             }
 
-            _match = Object.prototype.toString.call(o).match(/\[object (.*?)\]/);
-            _type = _match[1].toLowerCase();
+            match = Object.prototype.toString.call(o).match(/\[object (.*?)\]/);
+            type = match[1].toLowerCase();
 
-            if(_type === 'number' && isNaN(o)) {
-                _type = 'nan';
+            if(type === 'number' && isNaN(o)) {
+                type = 'nan';
             }
 
-            return _type;
+            return type;
         },
 
 

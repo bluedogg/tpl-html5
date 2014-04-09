@@ -28,6 +28,8 @@ function addPrefix(dir, src, pkg, dist_name) {
 
     min = {};
 
+    dist_name || (dist_name = 'dist');
+
     if(src.length) {
         src = src.map(function(item) {
             return dir.src + '/' + item;
@@ -326,6 +328,23 @@ module.exports = function(grunt) {
             }
         },
 
+
+
+        jscs: {
+            common: {
+                options: {
+                    config: ".jscs.json",
+                },
+                src: '<%= dir.src %>/js/**'
+                /*files: {
+                    src: src.js
+                    // src: '<%= min_files.js %>'
+                }*/
+            }
+        },
+
+
+
         cssmin: {
             /*main: {
                 files: {
@@ -542,6 +561,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('js', [
         'newer:jshint',
+        'newer:jscs:common',
         'newer:uglify:early',
         'newer:uglify:common',
     ]);
