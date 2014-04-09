@@ -1,15 +1,24 @@
 {
   "name": "Name",
   "version": "0.0.0",
-  "author": {
-    "name": "Name <info@example.com>",
-    "url": "http://example.com"
-  },
+  "homepage": "https://github.com/tttptd/tpl-html5",
+  "authors": [
+    "Yury Shishkin <mynsa04@ya.ru>"
+  ],
   "dependencies": {
     "jquery": "~1.10.2",
     "modernizr": "~2.6.2",
     "bootstrap": "~3.0.0",
     "es5-shim": "~2.1.0",
     "json3": "~3.2.5"
-  }
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "dev/vendor",
+    "test",
+    "tests"
+  ]
 }

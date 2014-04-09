@@ -95,7 +95,7 @@ module.exports = function(grunt) {
 
         dir = {
             src: 'dev',
-            dist: 'production',
+            dist: 'dist',
             dist_public: 'production/public',
         },
 
@@ -130,7 +130,7 @@ module.exports = function(grunt) {
                     'js/app.js',
                 ],
                 vendor: [
-                    'vendor/modernizr/modernizr.js',
+                    // 'vendor/modernizr/modernizr.js',
                     'vendor/jquery/jquery.js',
                 ]
             },
@@ -167,7 +167,6 @@ module.exports = function(grunt) {
 
     testable = addPrefix(dir, testable);
 
-
     grunt.initConfig({
 
         pkg: pkg,
@@ -176,7 +175,7 @@ module.exports = function(grunt) {
                     '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
                     '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
                     '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-                    '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+                    '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.authors %>;' +
                     ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n'
         },
 
@@ -288,12 +287,12 @@ module.exports = function(grunt) {
         },
 
         uglify: {
-            /*options: {
+            options: {
+                banner: '<%= meta.banner %>',
                 mangle: true,
-                // beautify: true,
-                banner: '<%= meta.banner %>'
+                beautify: false
             },
-            main: {
+            /*main: {
                 files: {
                     '<%= min_files.js %>': src.js
                 }
@@ -301,8 +300,6 @@ module.exports = function(grunt) {
 
             early: {
                 options: {
-                    mangle: true,
-                    beautify: false
                 },
                 files: {
                     '<%= min_files.js.early %>': src.js.early,
@@ -310,8 +307,6 @@ module.exports = function(grunt) {
             },
             common: {
                 options: {
-                    mangle: true,
-                    beautify: false
                 },
                 files: {
                     '<%= min_files.js.common %>': src.js.common,
@@ -320,7 +315,8 @@ module.exports = function(grunt) {
             vendor: {
                 options: {
                     mangle: true,
-                    beautify: false
+                    beautify: false,
+                    banner: false
                 },
                 files: {
                     '<%= min_files.js.vendor %>': src.js.vendor,
@@ -439,6 +435,44 @@ module.exports = function(grunt) {
 
 
 
+
+        symlink: {
+            // Enable overwrite to delete symlinks before recreating them
+            options: {
+                overwrite: false
+            },
+            // The "build/target.txt" symlink will be created and linked to
+            // "source/target.txt". It should appear like this in a file listing:
+            // build/target.txt -> ../source/target.txt
+            // Явное указание путей
+            /*explicit: {
+                src: '<%= dir.dist %>/{js,css}/**',
+                dest: '<%= dir.dist_public %>',
+                // filter: 'isFile'
+            },*/
+            // These examples using "expand" to generate src-dest file mappings:
+            // http://gruntjs.com/configuring-tasks#building-the-files-object-dynamically
+            expanded: {
+                files: [
+                    // Создает симлинки в [dest] на все собранные файлы, найденные в [src] и её детях
+                    {
+                        expand: true,
+                        overwrite: false,
+                        cwd: '<%= dir.dist %>',
+                        src: ['js/**', 'css/**'], // [dir.dist] -> /js/**, /css/**
+                        dest: '<%= dir.dist_public %>',
+                        filter: 'isFile'
+                        // filter: 'isDirectory'
+                    },
+                ]
+            },
+        },
+
+
+
+
+
+
         secret: grunt.file.readJSON('secret.json'),
 
         ftpush_auth: {
@@ -475,33 +509,35 @@ module.exports = function(grunt) {
                     'css', 'js', 'vendor', 'lib'
                 ]
             },
-            components: {
-                auth: '<%= ftpush_auth %>',
-                src: './',
-                dest: '/[dir]',
-                simple: true,
-                exclusions: [
-                    '**/.DS_Store', 'Gruntfile.js', '.*', 'package.json', 'secret.json', '.git', 'application', 'data', 'library', 'node_modules', 'production', 'public'
-                ]
-            },
-            application: {
-                auth: '<%= ftpush_auth %>',
-                src: 'application',
-                dest: '/[dir]/application',
-                simple: true,
-                exclusions: [
-                    '**/.DS_Store'
-                ]
-            },
-            library: {
-                auth: '<%= ftpush_auth %>',
-                src: 'library',
-                dest: '/[dir]/library',
-                simple: true,
-                exclusions: [
-                    '**/.DS_Store', '.git', '.svn', '.ZendFramework*'
-                ]
-            },
+
+            /* For Zend FW 1.x MVC Application */
+            // components: {
+                // auth: '<%= ftpush_auth %>',
+                // src: './',
+                // dest: '/[dir]',
+                // simple: true,
+                // exclusions: [
+                    // '**/.DS_Store', 'Gruntfile.js', '.*', 'package.json', 'secret.json', '.git', 'application', 'data', 'library', 'node_modules', 'production', 'public'
+                // ]
+            // },
+            // application: {
+                // auth: '<%= ftpush_auth %>',
+                // src: 'application',
+                // dest: '/[dir]/application',
+                // simple: true,
+                // exclusions: [
+                    // '**/.DS_Store'
+                // ]
+            // },
+            // library: {
+                // auth: '<%= ftpush_auth %>',
+                // src: 'library',
+                // dest: '/[dir]/library',
+                // simple: true,
+                // exclusions: [
+                    // '**/.DS_Store', '.git', '.svn', '.ZendFramework*'
+                // ]
+            // },
         },
 
 
