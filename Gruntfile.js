@@ -193,7 +193,7 @@ module.exports = function(grunt) {
                     nospawn : true,
                     // reload: true, // Автоматом перезапускает таск, при изменении Gruntfile.js
                 },
-                tasks: ['includereplace:livereload'],
+                // tasks: ['includereplace:livereload'],
                 files: [
                     // 'Gruntfile.js',
                     // '{.tmp,<%= dir.src %>}/{,**}/*.html',
@@ -389,12 +389,27 @@ module.exports = function(grunt) {
 
         includereplace: {
             options: {
+                prefix: '<!-- @@',
+                suffix: ' -->',
                 includesDir: '<%= dir.src %>/inc/',
             },
             livereload: {
                 files: {
                     '.tmp/': '<%= dir.src %>/*.html'
                 }
+            },
+            livereloadComplete: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= dir.src %>',
+                    src: [
+                        '**/*.html',
+                        '!inc/**',
+                        '!vendor/**',
+                        '!lib/**',
+                    ],
+                    dest: '.tmp/<%= dir.src %>'
+                }]
             },
             dist: {
                 files: [{
@@ -656,9 +671,20 @@ module.exports = function(grunt) {
 
         grunt.event.on('watch', function(action, filepath, target) {
             grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
-            console.log('===========', grunt.config('includereplace.livereload'));
-            grunt.config('includereplace.livereload.files', {'.tmp/': filepath});
-            console.log('___________', grunt.config('includereplace.livereload'));
+
+            // Был измененен инклюд, пересоберём все html
+            if(grunt.file.isMatch(dir.src + '/inc/*.html', filepath)) {
+                grunt.task.run([
+                    'includereplace:livereloadComplete'
+                ]);
+            }
+            // Просто html-ка, пересоберём только её
+            else {
+                grunt.config('includereplace.livereload.files', {'.tmp/': filepath});
+                grunt.task.run([
+                    'includereplace:livereload'
+                ]);
+            }
         });
     });
 
