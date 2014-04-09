@@ -1,0 +1,46 @@
+{
+    "dir": {
+        "src": "dev",
+        "dist": "dist",
+        "distPublic": "production/public"
+    },
+
+    "testable": [
+        "js/Tm/util.js"
+    ],
+
+    "src": {
+        /*
+        // Может быть массивом
+        "js": [
+            "vendor/modernizr/modernizr.js",
+            "vendor/jquery/jquery.js",
+
+            "js/Tm/util.js",
+            "js/app.js"
+        ],
+        "css": [
+            "css/basic.css",
+            "css/main.css"
+        ],
+        */
+
+        // Или объектом
+        "js": {
+            "early": [
+                "js/Tm/util.js",
+                "js/app.js"
+            ],
+            "common": [
+                "js/app.js"
+            ]
+        },
+        "css": {
+            "common": [
+                // "lib/bootstrap/css/bootstrap.css",
+                "css/basic.css",
+                "css/main.css"
+            ]
+        }
+    }
+}

@@ -5,8 +5,6 @@ var liveReloadSnippet = require('connect-livereload')({
     port: LIVERELOAD_PORT
 });
 var mountFolder = function(connect, dir) {
-    console.log('dir', dir);
-    console.log('dir', require('path').resolve(dir));
     return connect.static(require('path').resolve(dir));
 };
 
@@ -95,6 +93,8 @@ module.exports = function(grunt) {
 
 
 
+    var config = grunt.file.readJSON('grunt-config.json');
+
     var pkg = grunt.file.readJSON('component.json');
 
     /*var viewports = [
@@ -107,52 +107,13 @@ module.exports = function(grunt) {
     ];*/
     var viewports = ['320x480','480x320','384x640','640x384','602x963','963x602','600x960','960x600','800x1280','1280x800','768x1024','1024x768'];
 
-    var dir = {
-        src: 'dev',
-        dist: 'dist',
-        distPublic: 'production/public',
-    };
+    var dir = config.dir;
 
     // for jasmine testing
-    var testable = [
-        'js/Tm/util.js',
-    ];
+    var testable = config.testable;
 
     // Исходники
-    var src = {
-        /*
-        // Может быть массивом
-        js: [
-            'vendor/modernizr/modernizr.js',
-            'vendor/jquery/jquery.js',
-
-            'js/Tm/util.js',
-            'js/app.js',
-        ],
-        css: [
-            'css/basic.css',
-            'css/main.css',
-        ],
-        */
-
-        // Или объектом
-        js: {
-            early: [
-                'js/Tm/util.js',
-                'js/app.js',
-            ],
-            common: [
-                'js/app.js',
-            ],
-        },
-        css: {
-            common: [
-                // 'lib/bootstrap/css/bootstrap.css',
-                'css/basic.css',
-                'css/main.css',
-            ],
-        }
-    };
+    var src = config.src;
 
 
 

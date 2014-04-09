@@ -1,0 +1,29 @@
+{
+    "dir": {
+        "src": "dev",
+        "dist": "dist",
+        "distPublic": "production/public"
+    },
+
+    "testable": [
+        "js/Tm/util.js"
+    ],
+
+    "src": {
+        "js": {
+            "early": [
+                "js/Tm/util.js",
+                "js/app.js"
+            ],
+            "common": [
+                "js/app.js"
+            ]
+        },
+        "css": {
+            "common": [
+                "css/basic.css",
+                "css/main.css"
+            ]
+        }
+    }
+}
