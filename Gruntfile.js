@@ -1,10 +1,13 @@
 'use strict';
 
 var LIVERELOAD_PORT = 35729;
-var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
+var liveReloadSnippet = require('connect-livereload')({
+    port: LIVERELOAD_PORT
+});
 var mountFolder = function(connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
+
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -81,7 +84,7 @@ module.exports = function(grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
 
-    grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    // grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
@@ -129,10 +132,6 @@ module.exports = function(grunt) {
                 common: [
                     'js/app.js',
                 ],
-                vendor: [
-                    // 'vendor/modernizr/modernizr.js',
-                    'vendor/jquery/jquery.js',
-                ]
             },
             css: {
                 common: [
@@ -190,11 +189,12 @@ module.exports = function(grunt) {
                 options: {
                     livereload: LIVERELOAD_PORT
                 },
+                // tasks: ['jshint'],
                 files: [
-                    '<%= dir.src %>/*.html',
-                    '{.tmp,<%= dir.src %>}/css/{,*/}*.css',
-                    '{.tmp,<%= dir.src %>}/js/{,*/}*.js',
-                    '<%= dir.src %>/i/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+                    '{.tmp,<%= dir.src %>}/{,**}/*.html',
+                    '{.tmp,<%= dir.src %>}/css/{,**/}*.css',
+                    '{.tmp,<%= dir.src %>}/js/{,**/}*.js',
+                    // '<%= dir.src %>/i/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
                 ]
             }
         },
@@ -209,7 +209,7 @@ module.exports = function(grunt) {
                 options: {
                     middleware: function(connect) {
                         return [
-                            lrSnippet,
+                            liveReloadSnippet,
                             mountFolder(connect, '.tmp'),
                             mountFolder(connect, dir.src)
                         ];
@@ -252,15 +252,7 @@ module.exports = function(grunt) {
 
         /****************************************************/
 
-        jasmine: {
-            src: testable,
-            options: {
-                specs: 'spec/**/*.js',
-                vendor: [
-                    '<%= dir.src %>/vendor/jquery/jquery.js',
-                ]
-            }
-        },
+        /* Валидация *********************/
 
         jshint: {
             options: {
@@ -286,45 +278,6 @@ module.exports = function(grunt) {
             },
         },
 
-        uglify: {
-            options: {
-                banner: '<%= meta.banner %>',
-                mangle: true,
-                beautify: false
-            },
-            /*main: {
-                files: {
-                    '<%= min_files.js %>': src.js
-                }
-            }*/
-
-            early: {
-                options: {
-                },
-                files: {
-                    '<%= min_files.js.early %>': src.js.early,
-                }
-            },
-            common: {
-                options: {
-                },
-                files: {
-                    '<%= min_files.js.common %>': src.js.common,
-                }
-            },
-            vendor: {
-                options: {
-                    mangle: true,
-                    beautify: false,
-                    banner: false
-                },
-                files: {
-                    '<%= min_files.js.vendor %>': src.js.vendor,
-                }
-            }
-        },
-
-
 
         jscs: {
             common: {
@@ -341,8 +294,53 @@ module.exports = function(grunt) {
 
 
 
+        /* Тесты *********************/
+
+        jasmine: {
+            src: testable,
+            options: {
+                specs: 'spec/**/*.js',
+                vendor: [
+                    '<%= dir.src %>/vendor/jquery/jquery.js',
+                ]
+            }
+        },
+
+
+
+        /* Минификация *********************/
+
+        uglify: {
+            options: {
+                banner: '<%= meta.banner %>',
+                mangle: true,
+                beautify: false
+            },
+            /*all: {
+                files: {
+                    '<%= min_files.js %>': src.js
+                }
+            },*/
+
+            early: {
+                options: {
+                },
+                files: {
+                    '<%= min_files.js.early %>': src.js.early,
+                }
+            },
+            common: {
+                options: {
+                },
+                files: {
+                    '<%= min_files.js.common %>': src.js.common,
+                }
+            },
+        },
+
+
         cssmin: {
-            /*main: {
+            /*all: {
                 files: {
                     '<%= min_files.css %>': src.css,
                 },
@@ -369,13 +367,24 @@ module.exports = function(grunt) {
                         version: '<%= pkg.version %>',
                     }
                 },
-                files: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= dir.src %>',
+                    src: [
+                        '**/*.html',
+                        '!vendor/**',
+                        '!lib/**',
+                    ],
+                    dest: '<%= dir.dist %>'
+                }]
+                /*files: {
                     '<%= dir.dist %>/index.html': '<%= dir.src %>/index.html',
-                }
+                }*/
             }
         },
 
 
+        // Чистит результирующий html
         htmlmin: {
             dist: {
                 options: {
@@ -395,21 +404,9 @@ module.exports = function(grunt) {
         },
 
 
-        compress: {
-            main: {
-                options: {
-                    mode: 'gzip',
-                    pretty: true,
-                },
-                expand: true,
-                cwd: '<%= dir.dist %>/',
-                src: ['**/*'],
-                dest: '<%= dir.dist %>/'
-            }
-        },
 
-        autoshot: {
-            /*default_options: {
+        /*autoshot: {
+            default_options: {
                 options: {
                     // necessary config
                     path: 'screenshots/',
@@ -420,7 +417,7 @@ module.exports = function(grunt) {
                     // local: { path: 'dev/index.html', port: '9001' },
                     viewport: viewports
                 },
-            },*/
+            },
 
             index: {
                 options: {
@@ -431,7 +428,7 @@ module.exports = function(grunt) {
                     viewport: viewports
                 }
             }
-        },
+        },*/
 
 
 
@@ -453,18 +450,16 @@ module.exports = function(grunt) {
             // These examples using "expand" to generate src-dest file mappings:
             // http://gruntjs.com/configuring-tasks#building-the-files-object-dynamically
             expanded: {
-                files: [
-                    // Создает симлинки в [dest] на все собранные файлы, найденные в [src] и её детях
-                    {
-                        expand: true,
-                        overwrite: false,
-                        cwd: '<%= dir.dist %>',
-                        src: ['js/**', 'css/**'], // [dir.dist] -> /js/**, /css/**
-                        dest: '<%= dir.dist_public %>',
-                        filter: 'isFile'
-                        // filter: 'isDirectory'
-                    },
-                ]
+                // Создает симлинки в [dest] на все собранные файлы, найденные в [src] и её детях
+                files: [{
+                    expand: true,
+                    overwrite: false,
+                    cwd: '<%= dir.dist %>',
+                    src: ['js/**', 'css/**'], // [dir.dist] -> /js/**, /css/**
+                    dest: '<%= dir.dist_public %>',
+                    filter: 'isFile'
+                    // filter: 'isDirectory'
+                }]
             },
         },
 
@@ -580,8 +575,12 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('server', function(target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+        if(target === 'dist') {
+            return grunt.task.run([
+                'build',
+                'open',
+                'connect:dist:keepalive'
+            ]);
         }
 
         grunt.task.run([
@@ -597,13 +596,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask('js', [
         'newer:jshint',
-        'newer:jscs:common',
-        'newer:uglify:early',
-        'newer:uglify:common',
-    ]);
-
-    grunt.registerTask('vendor', [
-        'newer:uglify:vendor',
+        'newer:jscs',
+        'newer:uglify',
+        'newer:uglify',
     ]);
 
     grunt.registerTask('css', [
@@ -617,13 +612,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', [
         'js',
-        'vendor',
         'css',
         'html',
-        // 'compress',
     ]);
 
-    grunt.registerTask('deploy-front', [
+    /*grunt.registerTask('deploy-front', [
         'ftpush:components',
         'ftpush:js',
         'ftpush:css',
@@ -638,6 +631,6 @@ module.exports = function(grunt) {
     grunt.registerTask('deploy', [
         'deploy-front',
         'deploy-back',
-    ]);
+    ]);*/
 
 };
