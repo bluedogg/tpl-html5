@@ -16,71 +16,6 @@ var mountFolder = function(connect, dir) {
 // 'test/spec/**/*.js'
 
 
-/**
- * Пробежим по src и добавим в путь префикс dir.src/
- * и создадим список минифицированных результирующих файлов
- *
- * @param {[type]} dir [description]
- * @param {[type]} src [description]
- * @param {[type]} pkg Если не указан, возвращает только src
- * @param {[type]} distName Ключ dist-директории (dist, distPublic...)
- *
- * @return Возвращает { src: src, min: min }
- */
-function addPrefix(dir, src, pkg, distName) {
-    var i, k, j, min;
-
-    min = {};
-
-    distName || (distName = 'dist');
-
-    if(src.length) {
-        src = src.map(function(item) {
-            return dir.src + '/' + item;
-        });
-    }
-    else {
-        for(i in src) {
-            if(src.hasOwnProperty(i)) {
-                if(src[i].length) { // Array
-                    for(j = 0; j < src[i].length; j++) {
-                        src[i][j] = dir.src + '/' + src[i][j];
-                    }
-                    /*src[i] = src[i].map(function(item) {
-                        return dir.src + '/' + item;
-                    })*/
-                    if(pkg) {
-                        min[i] = dir[distName] + '/' + i + '/' + pkg.name.toLowerCase() + '.min.v' + pkg.version + '.' + i; // Пока только js и css
-                    }
-                }
-                else { // Object
-                    min[i] = {};
-                    for(k in src[i]) {
-                        if(src[i].hasOwnProperty(k) && src[i][k].length) {
-                            for(j = 0; j < src[i][k].length; j++) {
-                                src[i][k][j] = dir.src + '/' + src[i][k][j];
-                            }
-                            /*src[i][k] = src[i][k].map(function(item) {
-                                return dir.src + '/' + item;
-                            });*/
-                            if(pkg) {
-                                min[i][k] = dir[distName] + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return (pkg ? {
-        src: src,
-        min: min
-    } : src);
-}
-
-
-
 module.exports = function(grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
@@ -89,6 +24,72 @@ module.exports = function(grunt) {
 
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
+
+
+    /**
+     * Пробежим по src и добавим в путь префикс dir.src/
+     * и создадим список минифицированных результирующих файлов
+     *
+     * @param {[type]} dir [description]
+     * @param {[type]} src [description]
+     * @param {[type]} pkg Если не указан, возвращает только src
+     * @param {[type]} distName Ключ dist-директории (dist, distPublic...)
+     *
+     * @return Возвращает { src: src, min: min }
+     */
+    function addPrefix(dir, src, pkg, distName) {
+        var i, k, j, min;
+
+        min = {};
+
+        distName || (distName = 'dist');
+
+        if(src.length) {
+            src = src.map(function(item) {
+                return dir.src + '/' + item;
+            });
+        }
+        else {
+            for(i in src) {
+                if(src.hasOwnProperty(i)) {
+                    if(src[i].length) { // Array
+                        for(j = 0; j < src[i].length; j++) {
+                            src[i][j] = dir.src + '/' + src[i][j];
+                        }
+                        /*src[i] = src[i].map(function(item) {
+                            return dir.src + '/' + item;
+                        })*/
+                        if(pkg) {
+                            min[i] = dir[distName] + '/' + i + '/' + pkg.name.toLowerCase() + '.min.v' + pkg.version + '.' + i; // Пока только js и css
+                        }
+                    }
+                    else { // Object
+                        min[i] = {};
+                        for(k in src[i]) {
+                            if(src[i].hasOwnProperty(k) && src[i][k].length) {
+                                for(j = 0; j < src[i][k].length; j++) {
+                                    src[i][k][j] = dir.src + '/' + src[i][k][j];
+                                }
+                                /*src[i][k] = src[i][k].map(function(item) {
+                                    return dir.src + '/' + item;
+                                });*/
+                                if(pkg) {
+                                    min[i][k] = dir[distName] + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return (pkg ? {
+            src: src,
+            min: min
+        } : src);
+    }
+
 
 
 
