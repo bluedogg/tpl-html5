@@ -681,6 +681,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('html', [
+        'newer:htmlhint',
         'newer:includereplace:dist',
         'newer:targethtml',
         'newer:htmlmin',
