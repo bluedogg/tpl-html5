@@ -210,7 +210,7 @@ module.exports = function(grunt) {
                         return [
                             liveReloadSnippet,
                             mountFolder(connect, '.tmp'),
-                            mountFolder(connect, dir.src) // почему-то не работает с '<%= dir.src %>'
+                            mountFolder(connect, dir.src) // почему-то не работает с '<%= dir.src %>'. Бля, потому что это функция!
                         ];
                     }
                 }
@@ -229,7 +229,7 @@ module.exports = function(grunt) {
                 options: {
                     middleware: function(connect) {
                         return [
-                            mountFolder(connect, dir.dist) // почему-то не работает с '<%= dir.dist %>'
+                            mountFolder(connect, dir.dist) // почему-то не работает с '<%= dir.dist %>'. Бля, потому что это функция!
                         ];
                     }
                 }
