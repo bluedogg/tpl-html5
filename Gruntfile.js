@@ -630,6 +630,19 @@ module.exports = function(grunt) {
         },*/
 
 
+
+        // Сохраняет в переменную [property] текущую git-ревизию. Usage: <%= meta.revision %>
+        revision: {
+            options: {
+                property: 'meta.revision',
+                ref: 'HEAD',
+                short: true
+            }
+        },
+
+
+
+
         empty: {}
 
     });

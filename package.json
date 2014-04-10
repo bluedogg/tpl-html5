@@ -35,7 +35,8 @@
     "grunt-contrib-jasmine": "~0.6.3",
     "grunt-include-replace": "~1.2.0",
     "grunt-htmlhint": "~0.4.0",
-    "grunt-bower": "~0.11.0"
+    "grunt-bower": "~0.11.0",
+    "grunt-git-revision": "0.0.1"
   },
   "main": "Gruntfile.js",
   "dependencies": {},
