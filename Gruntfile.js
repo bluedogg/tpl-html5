@@ -449,25 +449,6 @@ module.exports = function(grunt) {
         },
 
 
-        // Чистит результирующий html
-        htmlmin: {
-            dist: {
-                options: {
-                    // removeComments: true,
-                    // collapseWhitespace: true,
-                    // collapseBooleanAttributes: true,
-                    removeRedundantAttributes: true,
-                    removeEmptyAttributes: true,
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= dir.dist %>',
-                    src: '**/*.html',
-                    dest: '<%= dir.dist %>'
-                }]
-            }
-        },
-
 
 
 
@@ -784,7 +765,6 @@ module.exports = function(grunt) {
         'newer:htmlhint',
         'newer:includereplace:dist',
         'newer:targethtml',
-        'newer:htmlmin',
     ]);
 
     grunt.registerTask('build', [
