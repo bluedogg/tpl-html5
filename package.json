@@ -37,7 +37,8 @@
     "grunt-htmlhint": "~0.4.0",
     "grunt-bower": "~0.11.0",
     "grunt-git-revision": "0.0.1",
-    "grunt-bootstrap": "~0.1.0"
+    "grunt-bootstrap": "~0.1.0",
+    "grunt-lint-inline": "~0.4.0"
   },
   "main": "Gruntfile.js",
   "dependencies": {},

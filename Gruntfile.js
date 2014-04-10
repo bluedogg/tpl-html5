@@ -250,6 +250,23 @@ module.exports = function(grunt) {
         },
 
 
+        // Lint inline JS
+        inlinelint: {
+            all: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= dir.src %>',
+                    src: [
+                        '**/*.html',
+                        '!inc/**',
+                        '!vendor/**',
+                        '!lib/**',
+                    ],
+                }]
+            }
+        },
+
+
         jscs: {
             common: {
                 options: {
@@ -700,8 +717,6 @@ module.exports = function(grunt) {
         },
 
 
-
-
         empty: {}
 
     });
@@ -765,6 +780,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('html', [
+        'newer:inlinelint',
         'newer:htmlhint',
         'newer:includereplace:dist',
         'newer:targethtml',
