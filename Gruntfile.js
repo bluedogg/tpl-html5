@@ -217,6 +217,9 @@ module.exports = function(grunt) {
             dist: [
                 '<%= dir.dist %>/*',
             ],
+            distVendor: [
+                '<%= dir.dist %>/vendor/*',
+            ],
             server: '.tmp'
         },
 
@@ -347,18 +350,18 @@ module.exports = function(grunt) {
             },
 
             // Жмём каждый *.js отдельно
-            /*separately: {
+            vendor: {
                 options: {
                 },
                 files: [{
-                    expand: true,                           // Enable dynamic expansion.
-                    cwd: '<%= dir.src %>',                  // Src matches are relative to this path.
-                    src: '<%= src.js.early %>',             // Actual pattern(s) to match.
-                    dest: '<%= dir.dist %>',                // Destination path prefix.
-                    ext: '.min.v' + pkg.version + '.js',    // Dest filepaths will have this extension.
-                    extDot: 'last'                          // Extensions in filenames begin after the last dot
+                    expand: true,               // Enable dynamic expansion.
+                    cwd: '<%= dir.dist %>',     // Src matches are relative to this path.
+                    src: 'vendor/{,**/}*.js',   // Actual pattern(s) to match.
+                    dest: '<%= dir.dist %>',    // Destination path prefix.
+                    ext: '.min.js',             // Dest filepaths will have this extension.
+                    extDot: 'last'              // Extensions in filenames begin after the last dot
                 }],
-            },*/
+            },
         },
 
 
@@ -370,7 +373,7 @@ module.exports = function(grunt) {
                 options: {
                     banner: '<%= meta.banner %>'
                 }
-            }*/
+            },*/
 
             common: {
                 options: {
@@ -379,7 +382,21 @@ module.exports = function(grunt) {
                 files: {
                     '<%= min.css.common %>': '<%= src.css.common %>',
                 }
-            }
+            },
+
+            vendor: {
+                options: {
+                    banner: ''
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= dir.dist %>',
+                    src: 'vendor/{,**/}*.css',
+                    dest: '<%= dir.dist %>',
+                    ext: '.min.css',
+                    extDot: 'last'
+                }],
+            },
         },
 
 
@@ -462,7 +479,7 @@ module.exports = function(grunt) {
                         bootstrap: {
                             dest: '<%= dir.dist %>/vendor/fonts',
                             css_dest: '<%= dir.dist %>/vendor/css'
-                        }
+                        },
                     }
                 }
             }
@@ -487,43 +504,43 @@ module.exports = function(grunt) {
                 // 'bootstrap-typeahead.js',
             ],
             css: [
-                // 'accordion.less',
-                // 'alerts.less',
-                // 'breadcrumbs.less',
-                // 'button-groups.less',
-                // 'buttons.less',
-                // 'carousel.less',
-                // 'close.less',
-                // 'code.less',
-                // 'component-animations.less',
-                // 'dropdowns.less',
+                'accordion.less',
+                'alerts.less',
+                'breadcrumbs.less',
+                'button-groups.less',
+                'buttons.less',
+                'carousel.less',
+                'close.less',
+                'code.less',
+                'component-animations.less',
+                'dropdowns.less',
                 'forms.less',
-                // 'grid.less',
-                // 'hero-unit.less',
-                // 'labels-badges.less',
-                // 'layouts.less',
-                // 'media.less',
-                // 'modals.less',
-                // 'navbar.less',
-                // 'navs.less',
-                // 'pager.less',
-                // 'pagination.less',
-                // 'popovers.less',
-                // 'progress-bars.less',
+                'grid.less',
+                'hero-unit.less',
+                'labels-badges.less',
+                'layouts.less',
+                'media.less',
+                'modals.less',
+                'navbar.less',
+                'navs.less',
+                'pager.less',
+                'pagination.less',
+                'popovers.less',
+                'progress-bars.less',
                 'reset.less',
                 'responsive-1200px-min.less',
                 'responsive-767px-max.less',
                 'responsive-768px-979px.less',
                 'responsive-navbar.less',
                 'responsive-utilities.less',
-                // 'scaffolding.less',
+                'scaffolding.less',
                 'sprites.less',
-                // 'tables.less',
-                // 'thumbnails.less',
-                // 'tooltip.less',
-                // 'type.less',
-                // 'utilities.less',
-                // 'wells.less',
+                'tables.less',
+                'thumbnails.less',
+                'tooltip.less',
+                'type.less',
+                'utilities.less',
+                'wells.less',
             ]
         },
 
@@ -577,7 +594,7 @@ module.exports = function(grunt) {
             js: {
                 auth: '<%= ftpush_auth %>',
                 src: '<%= dir.distPublic %>/js',
-                dest: '/[dir]/public_html/js',
+                dest: '<%= dir.remoteApp %>/<%= dir.remotePublic %>/js',
                 simple: true,
                 exclusions: [
                     '**/.DS_Store'
@@ -586,7 +603,7 @@ module.exports = function(grunt) {
             css: {
                 auth: '<%= ftpush_auth %>',
                 src: '<%= dir.distPublic %>/css',
-                dest: '/[dir]/public_html/css',
+                dest: '<%= dir.remoteApp %>/<%= dir.remotePublic %>/css',
                 simple: true,
                 exclusions: [
                     '**/.DS_Store'
@@ -595,7 +612,7 @@ module.exports = function(grunt) {
             html: {
                 auth: '<%= ftpush_auth %>',
                 src: '<%= dir.distPublic %>/css',
-                dest: '/[dir]/public_html',
+                dest: '<%= dir.remoteApp %>/<%= dir.remotePublic %>',
                 simple: true,
                 exclusions: [
                     'css', 'js', 'vendor', 'lib'
@@ -606,7 +623,7 @@ module.exports = function(grunt) {
             // components: {
                 // auth: '<%= ftpush_auth %>',
                 // src: './',
-                // dest: '/[dir]',
+                // dest: '<%= dir.remoteApp %>',
                 // simple: true,
                 // exclusions: [
                     // '**/.DS_Store', 'Gruntfile.js', '.*', 'package.json', 'secret.json', '.git', 'application', 'data', 'library', 'node_modules', 'production', 'public'
@@ -615,7 +632,7 @@ module.exports = function(grunt) {
             // application: {
                 // auth: '<%= ftpush_auth %>',
                 // src: 'application',
-                // dest: '/[dir]/application',
+                // dest: '<%= dir.remoteApp %>/application',
                 // simple: true,
                 // exclusions: [
                     // '**/.DS_Store'
@@ -624,7 +641,7 @@ module.exports = function(grunt) {
             // library: {
                 // auth: '<%= ftpush_auth %>',
                 // src: 'library',
-                // dest: '/[dir]/library',
+                // dest: '<%= dir.remoteApp %>/library',
                 // simple: true,
                 // exclusions: [
                     // '**/.DS_Store', '.git', '.svn', '.ZendFramework*'
@@ -767,11 +784,32 @@ module.exports = function(grunt) {
         'newer:targethtml',
     ]);
 
-    grunt.registerTask('build', [
-        'js',
-        'css',
-        'html',
-    ]);
+    grunt.registerTask('build', function(target) {
+        var tasks = [];
+
+        if(target === 'vendor') {
+            tasks = tasks.concat([
+                'clean:distVendor',
+                'bower',
+                'uglify:vendor',
+                'cssmin:vendor',
+            ]);
+        }
+        else {
+            tasks = tasks.concat([
+                'js',
+                'html',
+                'css',
+            ]);
+
+            /*if(target == 'public') {
+                tasks = tasks.concat([
+                ]);
+            }*/
+        }
+
+        return grunt.task.run(tasks);
+    });
 
     /*grunt.registerTask('deploy-front', [
         'ftpush:components',

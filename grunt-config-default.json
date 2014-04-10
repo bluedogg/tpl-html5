@@ -1,8 +1,12 @@
 {
     "dir": {
         "src": "dev",
+        // Результат сбоки
         "dist": "dist",
-        "distPublic": "production/public"
+        // Паблик для app
+        "distPublic": "app/public",
+        "remoteApp": "/app",
+        "remotePublic": "public_html"
     },
 
     "testable": [

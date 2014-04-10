@@ -2,7 +2,9 @@
     "dir": {
         "src": "dev",
         "dist": "dist",
-        "distPublic": "production/public"
+        "distPublic": "app/public",
+        "remoteApp": "/app",
+        "remotePublic": "public_html"
     },
 
     "testable": [
