@@ -2,13 +2,15 @@
 
 > Create a avanced html5-template.
 
-
-
+## Init
 ```
 git clone git://github.com/tttptd/tpl-html5.git .
 bower i
 npm i
 ```
+
+
+## Tasks
 
 Starting local autoreload server
 ```
