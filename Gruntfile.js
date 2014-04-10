@@ -454,34 +454,21 @@ module.exports = function(grunt) {
 
 
 
-
-
-
-        /*autoshot: {
-            default_options: {
+        bower: {
+            dev: {
+                dest: '<%= dir.dist %>/vendor',
+                js_dest: '<%= dir.dist %>/vendor/js',
+                css_dest: '<%= dir.dist %>/vendor/css',
                 options: {
-                    // necessary config
-                    path: 'screenshots/',
-                    filename: '',
-                    type: 'PNG',
-                    // optional config, must set either remote or local
-                    remote: 'http://localhost:<%= connect.options.port %>',
-                    // local: { path: 'dev/index.html', port: '9001' },
-                    viewport: viewports
-                },
-            },
-
-            index: {
-                options: {
-                    path: 'screenshots/',
-                    filename: 'index',
-                    type: 'png',
-                    remote: 'http://localhost:<%= connect.options.port %>',
-                    viewport: viewports
+                    packageSpecific: {
+                        bootstrap: {
+                            dest: '<%= dir.dist %>/vendor/fonts',
+                            css_dest: '<%= dir.dist %>/vendor/css'
+                        }
+                    }
                 }
             }
-        },*/
-
+        },
 
 
 
@@ -616,6 +603,31 @@ module.exports = function(grunt) {
             }
         },
 
+
+        /*autoshot: {
+            default_options: {
+                options: {
+                    // necessary config
+                    path: 'screenshots/',
+                    filename: '',
+                    type: 'PNG',
+                    // optional config, must set either remote or local
+                    remote: 'http://localhost:<%= connect.options.port %>',
+                    // local: { path: 'dev/index.html', port: '9001' },
+                    viewport: viewports
+                },
+            },
+
+            index: {
+                options: {
+                    path: 'screenshots/',
+                    filename: 'index',
+                    type: 'png',
+                    remote: 'http://localhost:<%= connect.options.port %>',
+                    viewport: viewports
+                }
+            }
+        },*/
 
 
         empty: {}

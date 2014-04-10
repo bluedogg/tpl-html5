@@ -8,9 +8,9 @@
   "dependencies": {
     "jquery": "~1.10.2",
     "modernizr": "~2.6.2",
-    "bootstrap": "~3.0.0",
     "es5-shim": "~2.1.0",
-    "json3": "~3.2.5"
+    "json3": "~3.2.5",
+    "bootstrap": "~3.1.1"
   },
   "license": "MIT",
   "ignore": [
