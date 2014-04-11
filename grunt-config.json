@@ -1,6 +1,10 @@
 {
     "dir": {
         "src": "dev",
+        "srcSeparately": {
+            "css": "f",
+            "js": "f"
+        },
         "dist": "dist",
         "distPublic": "app/public",
         "remoteApp": "/app",

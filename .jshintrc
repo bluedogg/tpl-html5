@@ -8,6 +8,7 @@
     "laxcomma": true,
     "expr": true,
     "boss": true,
+    "es5": true,
 
     "proto": true
 

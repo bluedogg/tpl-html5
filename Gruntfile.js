@@ -240,7 +240,10 @@ module.exports = function(grunt) {
                 "boss": true,
                 "proto": true,
             },
-            src: '<%= src.js %>',
+            src: '<%= dir.src %>/js/{,**/}*.js',
+            // src: '<%= src.js.common %>',
+
+            separately: '<%= dir.src %>/<%= dir.srcSeparately.js %>/{,**/}*.js',
 
             grunt: {
                 options: {
@@ -275,11 +278,14 @@ module.exports = function(grunt) {
                 options: {
                     config: ".jscs.json",
                 },
-                src: '<%= dir.src %>/js/**'
-                /*files: {
-                    src: '<%= src.js %>''
-                    // src: '<%= min.js %>'
-                }*/
+                src: '<%= dir.src %>/js/{,**/}*.js'
+            },
+
+            separately: {
+                options: {
+                    config: ".jscs.json",
+                },
+                src: '<%= dir.src %>/<%= dir.srcSeparately.js %>/{,**/}/*.js'
             }
         },
 
@@ -334,13 +340,13 @@ module.exports = function(grunt) {
                 }
             },*/
 
-            early: {
+            /*early: {
                 options: {
                 },
                 files: {
                     '<%= min.js.early %>': '<%= src.js.early %>',
                 }
-            },
+            },*/
             common: {
                 options: {
                 },
@@ -349,17 +355,30 @@ module.exports = function(grunt) {
                 }
             },
 
-            // Жмём каждый *.js отдельно
+            separately: {
+                options: {
+                    banner: '<%= meta.banner %>'
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= dir.src %>/<%= dir.srcSeparately.js %>',
+                    src: '{,**/}*.js',
+                    dest: '<%= dir.dist %>/<%= dir.srcSeparately.js %>',
+                    ext: '.min.js',
+                    extDot: 'last'
+                }]
+            },
+
             vendor: {
                 options: {
                 },
                 files: [{
-                    expand: true,               // Enable dynamic expansion.
-                    cwd: '<%= dir.dist %>',     // Src matches are relative to this path.
-                    src: 'vendor/{,**/}*.js',   // Actual pattern(s) to match.
-                    dest: '<%= dir.dist %>',    // Destination path prefix.
-                    ext: '.min.js',             // Dest filepaths will have this extension.
-                    extDot: 'last'              // Extensions in filenames begin after the last dot
+                    expand: true,
+                    cwd: '<%= dir.dist %>',
+                    src: 'vendor/{,**/}*.js',
+                    dest: '<%= dir.dist %>',
+                    ext: '.min.js',
+                    extDot: 'last'
                 }],
             },
         },
@@ -382,6 +401,20 @@ module.exports = function(grunt) {
                 files: {
                     '<%= min.css.common %>': '<%= src.css.common %>',
                 }
+            },
+
+            separately: {
+                options: {
+                    banner: '<%= meta.banner %>'
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= dir.src %>/<%= dir.srcSeparately.css %>',
+                    src: '{,**/}*.css',
+                    dest: '<%= dir.dist %>/<%= dir.srcSeparately.css %>',
+                    ext: '.min.css',
+                    extDot: 'last'
+                }]
             },
 
             vendor: {
@@ -770,11 +803,14 @@ module.exports = function(grunt) {
         'newer:jshint',
         'newer:jscs',
         'newer:jasmine',
-        'newer:uglify',
+        // 'newer:uglify:early',
+        'newer:uglify:common',
+        //'newer:uglify:separately',
     ]);
 
     grunt.registerTask('css', [
-        'newer:cssmin',
+        'newer:cssmin:common',
+        //'newer:cssmin:separately',
     ]);
 
     grunt.registerTask('html', [
