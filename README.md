@@ -15,6 +15,8 @@ npm i
 Starting local autoreload server
 ```
 grunt server
+grunt server:includes
+grunt server:dist
 ```
 
 Customize Twitter Bootstrap

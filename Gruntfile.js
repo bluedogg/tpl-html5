@@ -770,31 +770,43 @@ module.exports = function(grunt) {
             ]);
         }
 
+        // Если нужен сервер с инклюдами
+        if(target === 'includes') {
+            grunt.event.on('watch', function(action, filepath, target) {
+                grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
+
+                // Был измененен инклюд, пересоберём все html
+                if(grunt.file.isMatch(dir.src + '/inc/*.html', filepath)) {
+                    grunt.task.run([
+                        'includereplace:livereloadComplete'
+                    ]);
+                }
+                // Просто html-ка, пересоберём только её
+                else {
+                    grunt.config('includereplace.livereload.files', {'.tmp/': filepath});
+                    grunt.task.run([
+                        'includereplace:livereload'
+                    ]);
+                }
+            });
+
+            return grunt.task.run([
+                'clean:server',
+                'includereplace:livereload',
+                'connect:livereload',
+                'open:server',
+                'watch'
+            ]);
+        }
+
+        // Обычный сервак
         grunt.task.run([
             'clean:server',
-            'includereplace:livereload',
+            // 'includereplace:livereload',
             'connect:livereload',
             'open:server',
             'watch'
         ]);
-
-        grunt.event.on('watch', function(action, filepath, target) {
-            grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
-
-            // Был измененен инклюд, пересоберём все html
-            if(grunt.file.isMatch(dir.src + '/inc/*.html', filepath)) {
-                grunt.task.run([
-                    'includereplace:livereloadComplete'
-                ]);
-            }
-            // Просто html-ка, пересоберём только её
-            else {
-                grunt.config('includereplace.livereload.files', {'.tmp/': filepath});
-                grunt.task.run([
-                    'includereplace:livereload'
-                ]);
-            }
-        });
     });
 
     /****************************************************/
