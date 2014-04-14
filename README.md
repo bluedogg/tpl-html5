@@ -4,9 +4,7 @@
 
 ## Init
 ```
-git clone git://github.com/tttptd/tpl-html5.git .
-bower i
-npm i
+git clone git://github.com/tttptd/tpl-html5.git . && bower i && npm i
 ```
 
 
