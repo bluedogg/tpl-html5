@@ -626,7 +626,7 @@ module.exports = function(grunt) {
         ftpush: {
             js: {
                 auth: '<%= ftpush_auth %>',
-                src: '<%= dir.distPublic %>/js',
+                src: '<%= dir.dist %>/js',
                 dest: '<%= dir.remoteApp %>/<%= dir.remotePublic %>/js',
                 simple: true,
                 exclusions: [
@@ -635,7 +635,7 @@ module.exports = function(grunt) {
             },
             css: {
                 auth: '<%= ftpush_auth %>',
-                src: '<%= dir.distPublic %>/css',
+                src: '<%= dir.dist %>/css',
                 dest: '<%= dir.remoteApp %>/<%= dir.remotePublic %>/css',
                 simple: true,
                 exclusions: [
@@ -644,7 +644,7 @@ module.exports = function(grunt) {
             },
             html: {
                 auth: '<%= ftpush_auth %>',
-                src: '<%= dir.distPublic %>/css',
+                src: '<%= dir.dist %>/css',
                 dest: '<%= dir.remoteApp %>/<%= dir.remotePublic %>',
                 simple: true,
                 exclusions: [

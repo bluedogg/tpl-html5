@@ -54,7 +54,6 @@
         "requireParamTypes": true
     },
     "validateQuoteMarks": "'",
-    "validateIndentation": 4,
     "requireCapitalizedConstructors": true,
     "safeContextKeyword": ["that"],
     "requireDotNotation": true,
