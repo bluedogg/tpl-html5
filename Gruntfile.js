@@ -620,7 +620,8 @@ module.exports = function(grunt) {
         ftpush_auth: {
             host: '<%= secret.host %>',
             port: '<%= secret.port %>',
-            authKey: '[key]' // .ftppass
+            username: '<%= secret.username %>',
+            password: '<%= secret.password %>',
         },
 
         ftpush: {
@@ -644,11 +645,12 @@ module.exports = function(grunt) {
             },
             html: {
                 auth: '<%= ftpush_auth %>',
-                src: '<%= dir.dist %>/css',
+                src: '<%= dir.dist %>',
                 dest: '<%= dir.remoteApp %>/<%= dir.remotePublic %>',
+                keep: ['{,**/}*.{jpg,png,gif}', '.htaccess'],
                 simple: true,
                 exclusions: [
-                    'css', 'js', 'vendor', 'lib'
+                    '/css', '/js', '/vendor', '/lib', '/f', '/i', '{,**/}.*', '.htaccess'
                 ]
             },
 
@@ -811,27 +813,6 @@ module.exports = function(grunt) {
 
     /****************************************************/
 
-    grunt.registerTask('js', [
-        'newer:jshint',
-        'newer:jscs',
-        'newer:jasmine',
-        // 'newer:uglify:early',
-        'newer:uglify:common',
-        //'newer:uglify:separately',
-    ]);
-
-    grunt.registerTask('css', [
-        'newer:cssmin:common',
-        //'newer:cssmin:separately',
-    ]);
-
-    grunt.registerTask('html', [
-        'newer:inlinelint',
-        'newer:htmlhint',
-        'newer:includereplace:dist',
-        'newer:targethtml',
-    ]);
-
     grunt.registerTask('build', function(target) {
         var tasks = [];
 
@@ -843,17 +824,41 @@ module.exports = function(grunt) {
                 'cssmin:vendor',
             ]);
         }
+        else if(target === 'css') {
+            tasks = tasks.concat([
+                'newer:cssmin:common',
+                'newer:cssmin:separately',
+            ]);
+        }
+        else if(target === 'js') {
+            tasks = tasks.concat([
+                'newer:jshint',
+                'newer:jscs',
+                'newer:jasmine',
+                // 'newer:uglify:early',
+                'newer:uglify:common',
+                'newer:uglify:separately',
+            ]);
+        }
+        else if(target === 'html') {
+            tasks = tasks.concat([
+                'newer:inlinelint',
+                'newer:htmlhint',
+                'newer:includereplace:dist',
+                'newer:targethtml',
+            ]);
+        }
         else {
             tasks = tasks.concat([
-                'js',
-                'html',
-                'css',
+                'build:js',
+                'build:css',
+                'build:html',
             ]);
 
-            /*if(target == 'public') {
-                tasks = tasks.concat([
-                ]);
-            }*/
+            // if(target == 'public') {
+                // tasks = tasks.concat([
+                // ]);
+            // }
         }
 
         return grunt.task.run(tasks);
