@@ -864,6 +864,33 @@ module.exports = function(grunt) {
         return grunt.task.run(tasks);
     });
 
+    grunt.registerTask('deploy', function(target) {
+        var tasks = [];
+
+        if(target === 'verstka') {
+            tasks = tasks.concat([
+                'ftpush:js',
+                'ftpush:css',
+                'ftpush:html',
+            ]);
+        }
+        else {
+            /*tasks = tasks.concat([
+                'js',
+                'html',
+                'css',
+            ]);*/
+
+            /*if(target == 'public') {
+                tasks = tasks.concat([
+                ]);
+            }*/
+        }
+
+        return grunt.task.run(tasks);
+    });
+
+
     /*grunt.registerTask('deploy-front', [
         'ftpush:components',
         'ftpush:js',
