@@ -1,6 +1,6 @@
 # html5 template
 
-> Create a avanced html5-template.
+> Create an advanced html5-template.
 
 ## Init
 ```
