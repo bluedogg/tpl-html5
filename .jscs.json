@@ -15,7 +15,7 @@
     "requireSpaceBeforeBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!=="],
     "requireSpaceAfterBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!=="],
     "requireKeywordsOnNewLine": ["else"],
-    "requireCamelCaseOrUpperCaseIdentifiers": true,
+    "requireCamelCaseOrUpperCaseIdentifiers": false,
     "disallowMultipleLineStrings": true,
     "requireRightStickedOperators": ["!", "."],
     "requireLeftStickedOperators": [","],
