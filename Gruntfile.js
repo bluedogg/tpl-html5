@@ -73,6 +73,8 @@ module.exports = function(grunt) {
                                 }
                                 /*src[i][k] = src[i][k].map(function(item) {
                                     return dir.src + '/' + item;
+                                    /*src[i][k] = src[i][k].map(function(item) {
+                                    return dir.src + '/' + item;
                                 });*/
                                 if(pkg) {
                                     min[i][k] = dir[distName] + '/' + i + '/' + k + '.min.v' + pkg.version + '.' + i; // Пока только js и css
